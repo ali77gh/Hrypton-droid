@@ -173,7 +173,25 @@ class Pasher(private val activity: Activity) {
 
     // public things
 
+    /**
+     * password hash
+     * */
     fun pash(masterPass: String, url: String, username: String, listener: PasherListener) {
         alisHashAlgorithm("$masterPass$url$username", listener)
+    }
+
+    /**
+     * master key hash
+     * */
+    fun mash(masterPass: String, listener: PasherListener) {
+        Thread {
+
+            val mash :String = slowIt(masterPass)
+
+            activity.runOnUiThread {
+                listener.onReady(mash)
+            }
+
+        }.start()
     }
 }

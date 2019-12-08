@@ -3,12 +3,10 @@ package com.ali77gh.pash.ui.layout
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.Button
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.LinearLayout
+import android.widget.*
 
 import com.ali77gh.pash.R
+import com.ali77gh.pash.core.Validation
 
 class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,attrs) {
 
@@ -25,7 +23,12 @@ class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,
 
         enter.setOnClickListener {
 
-            // todo validation and show error
+            val res = Validation.validateMasterKey(input.text.toString())
+            if (res != Validation.OK){
+
+                Toast.makeText(activity,res,Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             // todo check if input is last master key that entered
             // todo watch remember me
             listener.onReady(input.text.toString())

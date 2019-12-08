@@ -11,7 +11,9 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import com.ali77gh.pash.R
+import com.ali77gh.pash.data.HistoryRepo
 import com.ali77gh.pash.data.MasterKeyRepo
+import com.ali77gh.pash.data.model.History
 import com.ali77gh.pash.ui.layout.ListLayout
 import com.ali77gh.pash.ui.layout.LoginLayout
 
@@ -134,10 +136,14 @@ class MainActivity : AppCompatActivity() {
 //        Log.d("size:",historyRepo.all.size.toString())
 //
 //        historyRepo.Insert(History("instagram.com","ali77gh"))
+//        historyRepo.Insert(History("gmail.com","alighahremani1377@gmail.com"))
+//        historyRepo.Insert(History("virgol.ir","ali77gh"))
+//        historyRepo.Insert(History("telegram.com","ali77gha"))
+//        historyRepo.Insert(History("fandogh.cloud","ali77gh"))
 //
 //        Log.d("size:",historyRepo.all.size.toString())
 //
-//        historyRepo.Remove(historyRepo.all[0].key)
+//        //historyRepo.Remove(historyRepo.all[0].key)
 //
 //        Log.d("size:",historyRepo.all.size.toString())
 

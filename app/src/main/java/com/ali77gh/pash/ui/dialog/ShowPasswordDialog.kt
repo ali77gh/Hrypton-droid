@@ -6,6 +6,8 @@ import android.content.Context.CLIPBOARD_SERVICE
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.ali77gh.pash.R
@@ -19,22 +21,27 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
 
     var pass : String = ""
 
+    var copy : TextView? = null
+    var progress : ProgressBar? = null
+    var password : TextView? = null
+    var guest : CheckBox? = null
+
     protected override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.dialog_show_password)
 
-        val password = findViewById<TextView>(R.id.text_show_password_password)
-        val progress = findViewById<ProgressBar>(R.id.progress_show_password)
+        password = findViewById<TextView>(R.id.text_show_password_password)
+        progress = findViewById<ProgressBar>(R.id.progress_show_password)
+        guest = findViewById<CheckBox>(R.id.check_show_password_guest);
         val close = findViewById<TextView>(R.id.btn_show_password_close)
-        val copy = findViewById<TextView>(R.id.btn_show_password_copy)
+        copy = findViewById<TextView>(R.id.btn_show_password_copy)
 
-        Pasher(activity).pash(MainActivity.masterKey, history.url, history.username, object : PasherListener {
-            override fun onReady(pass: String) {
-                copy.visibility = VISIBLE
-                progress.visibility = GONE
-                password.text = pass
-                this@ShowPasswordDialog.pass = pass
+       plzPash(false)
+
+        guest?.setOnCheckedChangeListener(object :CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+               plzPash(isChecked)
             }
 
         })
@@ -43,10 +50,32 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
             dismiss()
         }
 
-        copy.setOnClickListener {
+        copy?.setOnClickListener {
             putInClipBoard(pass)
             dismiss()
         }
+    }
+
+    private fun plzPash(isGuest :Boolean){
+
+        copy?.visibility = GONE
+        progress?.visibility = VISIBLE
+        password?.visibility = GONE
+        this.pass = ""
+        guest?.isEnabled = false
+
+        Pasher(activity).pash(MainActivity.masterKey, history.url, history.username,isGuest, object : PasherListener {
+            override fun onReady(pass: String) {
+                copy?.visibility = VISIBLE
+                progress?.visibility = GONE
+                password?.visibility = VISIBLE
+                password?.text = pass
+                this@ShowPasswordDialog.pass = pass
+                guest?.isEnabled = true
+            }
+
+        })
+
     }
 
     private fun putInClipBoard(value :String){

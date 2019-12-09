@@ -36,81 +36,81 @@ class Pasher(private val activity: Activity) {
         return value
     }
 
-    private fun standardIt(input: String) : String{
+    private fun standardIt(input: String): String {
 
         var chars = ""
         var desider = ""
         var isDesider = true
-        for (i in input){
-            if (isDesider){
-                desider+=i
+        for (i in input) {
+            if (isDesider) {
+                desider += i
                 isDesider = false
-            }else{
-                chars+=i
+            } else {
+                chars += i
                 isDesider = true
             }
         }
 
         var result = ""
-        for( i in 0 until desider.length){
+        for (i in 0 until desider.length) {
 
-            if (shouldSwitch(desider[i])){
-                result+= switch(chars[i])
-            }else{
-                result+= chars[i]
+            if (shouldSwitch(desider[i])) {
+                result += switch(chars[i])
+            } else {
+                result += chars[i]
             }
         }
 
         return result
     }
 
-    private fun shouldSwitch(input: Char) : Boolean{
+    private fun shouldSwitch(input: Char): Boolean {
 
-        return when(input){
-            'a'->true
-            'b'->true
-            'c'->true
-            'd'->true
-            'e'->true
-            'f'->true
-            'g'->true
-            'h'->true
-            'i'->true
-            'j'->true
-            'k'->true
-            'm'->true
-            'n'->true
-            'l'->true
-            'o'->true
-            'p'->true
-            'q'->true
-            'r'->true
-            's'->false
-            't'->false
-            'u'->false
-            'v'->false
-            'w'->false
-            'x'->false
-            'y'->false
-            'z'->false
-            '0'->false
-            '1'->false
-            '2'->false
-            '3'->false
-            '4'->false
-            '5'->false
-            '6'->false
-            '7'->false
-            '8'->false
-            '9'->false
+        return when (input) {
+            'a' -> true
+            'b' -> true
+            'c' -> true
+            'd' -> true
+            'e' -> true
+            'f' -> true
+            'g' -> true
+            'h' -> true
+            'i' -> true
+            'j' -> true
+            'k' -> true
+            'm' -> true
+            'n' -> true
+            'l' -> true
+            'o' -> true
+            'p' -> true
+            'q' -> true
+            'r' -> true
+            's' -> false
+            't' -> false
+            'u' -> false
+            'v' -> false
+            'w' -> false
+            'x' -> false
+            'y' -> false
+            'z' -> false
+            '0' -> false
+            '1' -> false
+            '2' -> false
+            '3' -> false
+            '4' -> false
+            '5' -> false
+            '6' -> false
+            '7' -> false
+            '8' -> false
+            '9' -> false
 
             else -> throw java.lang.RuntimeException("charecter is not lower or number")
         }
     }
 
-    private fun switch(input: Char):Char{
+    private fun switch(input: Char): Char {
 
-        return when(input) {
+        return when (input) {
             'a' -> 'A'
             'b' -> 'B'
             'c' -> 'C'
@@ -152,13 +152,13 @@ class Pasher(private val activity: Activity) {
         }
     }
 
-    private fun limitIt(input: String) = input.substring(0,CHAR_LIMIT)
+    private fun limitIt(input: String) = input.substring(0, CHAR_LIMIT)
 
     private fun alisHashAlgorithm(value: String, listener: PasherListener) {
         Thread {
 
             // ok! lets pash
-            var pash :String
+            var pash: String
 
             pash = slowIt(value) // 1
             pash = standardIt(pash) // 2
@@ -176,8 +176,16 @@ class Pasher(private val activity: Activity) {
     /**
      * password hash
      * */
+    fun pash(masterPass: String, url: String, username: String,isGuest: Boolean, listener: PasherListener ) {
+        if (isGuest)
+            alisHashAlgorithm("$masterPass$url$username isGuest", listener)
+        else
+            alisHashAlgorithm("$masterPass$url$username", listener)
+
+    }
+
     fun pash(masterPass: String, url: String, username: String, listener: PasherListener) {
-        alisHashAlgorithm("$masterPass$url$username", listener)
+        pash(masterPass, url, username, false,listener)
     }
 
     /**
@@ -186,7 +194,7 @@ class Pasher(private val activity: Activity) {
     fun mash(masterPass: String, listener: PasherListener) {
         Thread {
 
-            val mash :String = slowIt(masterPass)
+            val mash: String = slowIt(masterPass)
 
             activity.runOnUiThread {
                 listener.onReady(mash)

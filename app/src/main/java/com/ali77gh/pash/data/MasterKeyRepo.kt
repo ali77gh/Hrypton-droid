@@ -31,6 +31,10 @@ class MasterKeyRepo(var activity: Activity) {
         return repo!!.Load(selfFileName)
     }
 
+    fun selfRemove(){
+        repo!!.Remove(selfFileName)
+    }
+
 
 
     // hash of master key (for checking master key is last master key that entered)
@@ -41,9 +45,9 @@ class MasterKeyRepo(var activity: Activity) {
         return repo!!.CheckExist(hashFileName)
     }
 
-    fun hashSave(masterKey: String,listener:PasherListener) {
+    fun hashSave(masterKey: String, listener: PasherListener) {
 
-        Pasher(activity).mash(masterKey,object :PasherListener{
+        Pasher(activity).mash(masterKey, object :PasherListener{
             override fun onReady(hashedMasterKey: String) {
                 repo!!.Save(hashFileName, hashedMasterKey)
                 listener.onReady("")
@@ -63,6 +67,10 @@ class MasterKeyRepo(var activity: Activity) {
                 listener.onReady(hashedMasterKey==hashLoad())
             }
         })
+    }
+
+    fun hashRemove(){
+        repo!!.Remove(hashFileName)
     }
 
     interface MasterKeyHashCheckListener{

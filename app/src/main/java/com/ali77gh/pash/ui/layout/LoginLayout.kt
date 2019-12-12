@@ -7,6 +7,7 @@ import android.widget.*
 
 import com.ali77gh.pash.R
 import com.ali77gh.pash.core.Validation
+import com.ali77gh.pash.data.MasterKeyRepo
 
 class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,attrs) {
 
@@ -17,7 +18,7 @@ class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,
         val root = activity.layoutInflater.inflate(R.layout.layout_login, null) as LinearLayout
 
         val input = root.findViewById<EditText>(R.id.text_home_password)
-        val rememberMe = root.findViewById<EditText>(R.id.check_remember_me)
+        val rememberMe = root.findViewById<CheckBox>(R.id.check_remember_me)
         val enter = root.findViewById<Button>(R.id.btn_login)
 
 
@@ -30,7 +31,11 @@ class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,
                 return@setOnClickListener
             }
             // todo check if input is last master key that entered
-            // todo watch remember me
+
+            if (rememberMe.isChecked){
+                MasterKeyRepo(activity).selfSave(input.text.toString())
+            }
+
             listener.onReady(input.text.toString())
         }
 

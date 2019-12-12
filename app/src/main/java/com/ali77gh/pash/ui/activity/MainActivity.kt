@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.widget.ImageView
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         var masterKey = ""
     }
 
+    var drawer : DrawerLayout? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,13 +38,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        if (drawer!!.isDrawerOpen(Gravity.LEFT))
+            drawer!!.closeDrawer(Gravity.LEFT)
+        else
+        super.onBackPressed()
+    }
+
     private fun setupDrawer(){
 
         val berger = findViewById<ImageView>(R.id.image_home_berger)
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_home)
+        drawer = findViewById(R.id.drawer_home)
 
         berger.setOnClickListener {
-            drawer.openDrawer(Gravity.LEFT)
+            drawer!!.openDrawer(Gravity.LEFT)
         }
 
         findViewById<TextView>(R.id.drawer_how_it_works).setOnClickListener {
@@ -59,6 +69,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.drawer_who_is_behind).setOnClickListener {
 
         }
+
+        findViewById<TextView>(R.id.drawer_forgot_master_password).setOnClickListener {
+
+            MasterKeyRepo(this).selfRemove()
+            finish()
+            //todo its not working
+        }
+
     }
 
     private fun setupStatusBar(){
@@ -76,19 +94,33 @@ class MainActivity : AppCompatActivity() {
         val loginLayout = findViewById<LoginLayout>(R.id.home_login_layout)
         val listLayout = findViewById<ListLayout>(R.id.home_list_layout)
 
-        loginLayout.render(this)
-        listLayout.render(this)
+        val masterKeyRepo = MasterKeyRepo(this)
+        if (masterKeyRepo.selfIsExist()){
 
-        loginLayout.listener = object : LoginLayout.LoginLayoutListener {
-            override fun onReady(masterKey:String){
+            listLayout.render(this)
 
-                MainActivity.masterKey = masterKey
-                loginLayout.animate().alpha(0.0F).setDuration(200).start()
-                loginLayout.postDelayed({
-                    listLayout.alpha = 0.0F
-                    listLayout.visibility = VISIBLE
-                    listLayout.animate().alpha(1.0F).setDuration(200).start()
-                },250)
+
+            loginLayout.visibility = GONE
+            listLayout.visibility = VISIBLE
+            listLayout.alpha = 1.0f
+
+            masterKey = masterKeyRepo.selfLoad()
+
+        }else{
+            loginLayout.render(this)
+            listLayout.render(this)
+
+            loginLayout.listener = object : LoginLayout.LoginLayoutListener {
+                override fun onReady(masterKey:String){
+
+                    MainActivity.masterKey = masterKey
+                    loginLayout.animate().alpha(0.0F).setDuration(200).start()
+                    loginLayout.postDelayed({
+                        listLayout.alpha = 0.0F
+                        listLayout.visibility = VISIBLE
+                        listLayout.animate().alpha(1.0F).setDuration(200).start()
+                    },250)
+                }
             }
         }
     }

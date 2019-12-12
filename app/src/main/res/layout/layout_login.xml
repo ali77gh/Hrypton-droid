@@ -35,7 +35,8 @@
         android:text="remember me"
         android:paddingRight="90dp"
         android:textColor="@color/colorPrimary"
-        android:color="@color/colorPrimary"/>
+        android:color="@color/colorPrimary"
+        android:buttonTint="@color/colorPrimary"/>
 
     <Button
         android:id="@+id/btn_login"

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.ali77gh.pash.R
@@ -37,14 +36,11 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
         val close = findViewById<TextView>(R.id.btn_show_password_close)
         copy = findViewById<TextView>(R.id.btn_show_password_copy)
 
-       plzPash(false)
+       startPashing(false)
 
-        guest?.setOnCheckedChangeListener(object :CompoundButton.OnCheckedChangeListener{
-            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-               plzPash(isChecked)
-            }
-
-        })
+        guest?.setOnCheckedChangeListener { buttonView, isChecked ->
+            startPashing(isChecked)
+        }
 
         close.setOnClickListener {
             dismiss()
@@ -56,7 +52,7 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
         }
     }
 
-    private fun plzPash(isGuest :Boolean){
+    private fun startPashing(isGuest :Boolean){
 
         copy?.visibility = GONE
         progress?.visibility = VISIBLE

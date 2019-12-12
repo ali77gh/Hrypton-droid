@@ -47,6 +47,7 @@ class FadeLoop {
 
     fun animate() {
         OneTimeAnim(view!!, animationEnd)
+        forceStoped = false
     }
 
     fun stopAnimate() {

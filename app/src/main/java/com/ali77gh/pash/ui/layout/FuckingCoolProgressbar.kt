@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.ali77gh.pash.R
 import com.ali77gh.pash.ui.Tools
 import com.ali77gh.pash.ui.animation.ExpandAndCollapse
+import com.ali77gh.pash.ui.animation.FadeLoop
 import kotlin.random.Random
 
 class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayout(context,attrs) {
@@ -17,6 +18,7 @@ class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayou
 
     private var parent : FrameLayout? = null
     private val tvs = ArrayList<TextView>()
+    private var fadeLoop: FadeLoop? = null
 
     fun render(activity: Activity) {
         val root = activity.layoutInflater.inflate(R.layout.layout_fucking_cool_progressbar, null) as FrameLayout
@@ -43,15 +45,20 @@ class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayou
             putRandomChar(tv)
         }
 
+        fadeLoop = FadeLoop(root.getChildAt(1),Integer.MAX_VALUE,500)
+        fadeLoop!!.setMinFade(0.6f)
+
         this.addView(root)
     }
 
     fun start(){
         ExpandAndCollapse.expandTo(parent!!,Tools.DpToPixel(120f))
+        fadeLoop!!.animate()
     }
 
     fun stop(){
         ExpandAndCollapse.collapse(parent!!)
+        fadeLoop!!.stopAnimate()
     }
 
     private fun putRandomChar(label :TextView){

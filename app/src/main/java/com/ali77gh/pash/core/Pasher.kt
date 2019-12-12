@@ -9,6 +9,10 @@ class Pasher(private val activity: Activity) {
     private val HASH_LIEARS_COUNT = 50_000
     private val CHAR_LIMIT = 12
 
+    companion object{
+        val cache = mutableMapOf<String,String>()
+    }
+
     private fun sha256(base: String): String {
         try {
             val digest = MessageDigest.getInstance("SHA-256")
@@ -155,6 +159,12 @@ class Pasher(private val activity: Activity) {
     private fun limitIt(input: String) = input.substring(0, CHAR_LIMIT)
 
     private fun alisHashAlgorithm(value: String, listener: PasherListener) {
+
+        if (cache.containsKey(value)){
+            listener.onReady(cache.get(value)!!)
+            return
+        }
+
         Thread {
 
             // ok! lets pash
@@ -164,7 +174,9 @@ class Pasher(private val activity: Activity) {
             pash = standardIt(pash) // 2
             pash = limitIt(pash) // 3
 
+            cache[value] = pash
             activity.runOnUiThread {
+
                 listener.onReady(pash) // go ;)
             }
 

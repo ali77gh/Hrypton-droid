@@ -30,6 +30,13 @@ class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,
 
             progressbar.postDelayed( {
                 progressbar.stop()
+                progressbar.postDelayed( {
+                    progressbar.start()
+
+                    progressbar.postDelayed( {
+                        progressbar.stop()
+                    },5000)
+                },2000)
             },5000)
         },500)
 

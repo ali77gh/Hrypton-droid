@@ -6,7 +6,7 @@ import java.security.MessageDigest
 class Pasher(private val activity: Activity) {
 
     //config
-    private val HASH_LIEARS_COUNT = 100000
+    private val HASH_LIEARS_COUNT = 50_000
     private val CHAR_LIMIT = 12
 
     private fun sha256(base: String): String {

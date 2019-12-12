@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/login_lock"
-        android:tint="@color/colorPrimary"/>
+
+    <com.ali77gh.pash.ui.layout.FuckingCoolProgressbar
+        android:id="@+id/progressbar_login"
+        android:layout_width="120dp"
+        android:layout_height="120dp" />
+
 
     <EditText
         android:id="@+id/text_home_password"
@@ -18,31 +19,31 @@
         android:layout_marginTop="60dp"
         android:background="@drawable/shape_edit_text"
         android:hint="enter master key"
-        android:paddingRight="15dp"
+        android:inputType="textPassword"
+        android:lines="1"
         android:paddingLeft="15dp"
         android:paddingTop="5dp"
+        android:paddingRight="15dp"
         android:paddingBottom="5dp"
-        android:lines="1"
         android:textColor="@color/white"
-        android:textColorHint="@color/gray"
-        android:inputType="textPassword"/>
+        android:textColorHint="@color/gray" />
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/check_remember_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="remember me"
-        android:paddingRight="90dp"
-        android:textColor="@color/colorPrimary"
+        android:buttonTint="@color/colorPrimary"
         android:color="@color/colorPrimary"
-        android:buttonTint="@color/colorPrimary"/>
+        android:paddingRight="90dp"
+        android:text="remember me"
+        android:textColor="@color/colorPrimary" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="enter"
-        android:background="@drawable/shape_button"/>
+        android:background="@drawable/shape_button"
+        android:text="enter" />
 </LinearLayout>

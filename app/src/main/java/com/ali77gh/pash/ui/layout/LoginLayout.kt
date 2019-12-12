@@ -2,6 +2,7 @@ package com.ali77gh.pash.ui.layout
 
 import android.app.Activity
 import android.content.Context
+import android.support.v7.widget.AppCompatCheckBox
 import android.util.AttributeSet
 import android.widget.*
 
@@ -18,9 +19,19 @@ class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,
         val root = activity.layoutInflater.inflate(R.layout.layout_login, null) as LinearLayout
 
         val input = root.findViewById<EditText>(R.id.text_home_password)
-        val rememberMe = root.findViewById<CheckBox>(R.id.check_remember_me)
+        val rememberMe = root.findViewById<AppCompatCheckBox>(R.id.check_remember_me)
         val enter = root.findViewById<Button>(R.id.btn_login)
+        val progressbar = root.findViewById<FuckingCoolProgressbar>(R.id.progressbar_login)
 
+        progressbar.render(activity)
+
+        progressbar.postDelayed( {
+            progressbar.start()
+
+            progressbar.postDelayed( {
+                progressbar.stop()
+            },5000)
+        },500)
 
         enter.setOnClickListener {
 

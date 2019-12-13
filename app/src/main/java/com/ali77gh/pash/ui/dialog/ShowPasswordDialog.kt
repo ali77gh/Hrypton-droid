@@ -13,7 +13,7 @@ import com.ali77gh.pash.core.Pasher
 import com.ali77gh.pash.core.PasherListener
 import com.ali77gh.pash.data.model.History
 import com.ali77gh.pash.ui.activity.MainActivity
-import com.ali77gh.pash.ui.layout.FuckingCoolProgressbar
+import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
 
 
 class ShowPasswordDialog(activity: Activity, private val history: History) : BaseDialog(activity) {
@@ -37,8 +37,9 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
         copy = findViewById(R.id.btn_show_password_copy)
 
 
-        startPashing(false)
         progress?.render(activity)
+        startPashing(false)
+
 
         guest?.setOnCheckedChangeListener { buttonView, isChecked ->
             startPashing(isChecked)
@@ -58,18 +59,21 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
 
         copy?.visibility = GONE
         progress?.visibility = VISIBLE
+        progress?.start()
         password?.visibility = GONE
         this.pass = ""
         guest?.isEnabled = false
 
         Pasher(activity).pash(MainActivity.masterKey, history.url, history.username,isGuest, object : PasherListener {
             override fun onReady(pass: String) {
-                copy?.visibility = VISIBLE
-                progress?.visibility = GONE
-                password?.visibility = VISIBLE
-                password?.text = pass
-                this@ShowPasswordDialog.pass = pass
-                guest?.isEnabled = true
+                progress?.stop(cb = {
+                    copy?.visibility = VISIBLE
+                    progress?.visibility = GONE
+                    password?.visibility = VISIBLE
+                    password?.text = pass
+                    this@ShowPasswordDialog.pass = pass
+                    guest?.isEnabled = true
+                })
             }
 
         })

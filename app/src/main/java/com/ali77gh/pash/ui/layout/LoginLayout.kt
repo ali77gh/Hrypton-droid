@@ -7,12 +7,16 @@ import android.util.AttributeSet
 import android.widget.*
 
 import com.ali77gh.pash.R
+import com.ali77gh.pash.core.Pasher
+import com.ali77gh.pash.core.PasherListener
 import com.ali77gh.pash.core.Validation
 import com.ali77gh.pash.data.MasterKeyRepo
+import com.ali77gh.pash.ui.dialog.ItsNotLastPassword
+import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
 
-class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,attrs) {
+class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
 
-    lateinit var listener : LoginLayoutListener
+    lateinit var listener: LoginLayoutListener
 
 
     fun render(activity: Activity) {
@@ -25,42 +29,108 @@ class LoginLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,
 
         progressbar.render(activity)
 
-        progressbar.postDelayed( {
-            progressbar.start()
-
-            progressbar.postDelayed( {
-                progressbar.stop()
-                progressbar.postDelayed( {
-                    progressbar.start()
-
-                    progressbar.postDelayed( {
-                        progressbar.stop()
-                    },5000)
-                },2000)
-            },5000)
-        },500)
+        val masterKeyRepo = MasterKeyRepo(activity)
 
         enter.setOnClickListener {
 
-            val res = Validation.validateMasterKey(input.text.toString())
-            if (res != Validation.OK){
+            val masterPassword = input.text.toString()
 
-                Toast.makeText(activity,res,Toast.LENGTH_SHORT).show()
+            //   validation
+            val res = Validation.validateMasterKey(masterPassword)
+            if (res != Validation.OK) {
+
+                Toast.makeText(activity, res, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            // todo check if input is last master key that entered
 
-            if (rememberMe.isChecked){
-                MasterKeyRepo(activity).selfSave(input.text.toString())
+            fun disableInputs(){
+                input.isEnabled = false
+                rememberMe.isEnabled = false
+                enter.isEnabled = false
+            }
+            fun enable(){
+                input.isEnabled = true
+                rememberMe.isEnabled = true
+                enter.isEnabled = true
             }
 
-            listener.onReady(input.text.toString())
+
+            if (masterKeyRepo.hashIsExist()) {
+                progressbar.start()
+                disableInputs()
+                Pasher(activity).mash(masterPassword, object : PasherListener {
+
+                    override fun onReady(pass: String) {
+                        progressbar.stop {
+                            enable()
+
+                            if (pass == masterKeyRepo.hashLoad()) {
+                                if (rememberMe.isChecked) {
+
+                                    masterKeyRepo.selfSave(masterPassword)
+                                    masterKeyRepo.hashRemove()
+                                    listener.onReady(masterPassword)
+                                }else{
+                                    listener.onReady(masterPassword)
+                                }
+
+                            } else {
+                                ItsNotLastPassword(activity, cb = {
+                                    if (rememberMe.isChecked) {
+
+                                        masterKeyRepo.selfSave(masterPassword)
+                                        masterKeyRepo.hashRemove()
+                                        listener.onReady(masterPassword)
+                                    }else{
+                                        progressbar.start()
+                                        disableInputs()
+                                        masterKeyRepo.hashSave(masterPassword, object : PasherListener {
+
+                                            override fun onReady(pass: String) {
+                                                progressbar.stop {
+                                                    enable()
+                                                    listener.onReady(masterPassword)
+                                                }
+                                            }
+
+                                        })
+                                    }
+
+
+                                }).show()
+                            }
+                        }
+                    }
+                })
+
+            }else {
+                if (rememberMe.isChecked) {
+
+                    masterKeyRepo.selfSave(masterPassword)
+                    masterKeyRepo.hashRemove()
+                    listener.onReady(masterPassword)
+                }else{
+                    progressbar.start()
+                    disableInputs()
+                    masterKeyRepo.hashSave(masterPassword, object : PasherListener {
+                        override fun onReady(pass: String) {
+                            progressbar.stop {
+                                enable()
+                                listener.onReady(masterPassword)
+                            }
+                        }
+
+                    })
+                }
+
+            }
+
         }
 
         this.addView(root)
     }
 
-    interface LoginLayoutListener{
-        fun onReady(masterKey:String)
+    interface LoginLayoutListener {
+        fun onReady(masterKey: String)
     }
 }

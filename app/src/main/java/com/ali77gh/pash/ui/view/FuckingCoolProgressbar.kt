@@ -1,11 +1,10 @@
-package com.ali77gh.pash.ui.layout
+package com.ali77gh.pash.ui.view
 
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import com.ali77gh.pash.R
 import com.ali77gh.pash.ui.Tools
@@ -15,6 +14,7 @@ import kotlin.random.Random
 
 class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayout(context,attrs) {
 
+    private val duration: Int = 500
 
     private var parent : FrameLayout? = null
     private val tvs = ArrayList<TextView>()
@@ -45,7 +45,7 @@ class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayou
             putRandomChar(tv)
         }
 
-        fadeLoop = FadeLoop(root.getChildAt(1),Integer.MAX_VALUE,500)
+        fadeLoop = FadeLoop(root.getChildAt(1),Integer.MAX_VALUE,duration)
         fadeLoop!!.setMinFade(0.6f)
 
         this.addView(root)
@@ -56,9 +56,10 @@ class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayou
         fadeLoop!!.animate()
     }
 
-    fun stop(){
+    fun stop(cb : ()->Unit){
         ExpandAndCollapse.collapse(parent!!)
         fadeLoop!!.stopAnimate()
+        parent!!.postDelayed(cb,duration.toLong())
     }
 
     private fun putRandomChar(label :TextView){

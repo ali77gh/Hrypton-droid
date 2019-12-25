@@ -7,7 +7,8 @@ class Pasher(private val activity: Activity) {
 
     //config
     private val HASH_LIEARS_COUNT = 50_000
-    private val CHAR_LIMIT = 12
+    private val PASSWORD_MIN_SIZE = 12 //max size is min+3
+
 
     companion object{
         val cache = mutableMapOf<String,String>()
@@ -43,25 +44,25 @@ class Pasher(private val activity: Activity) {
     private fun standardIt(input: String): String {
 
         var chars = ""
-        var desider = ""
-        var isDesider = true
+        var decider = ""
+        var isDecider = true
         for (i in input) {
-            if (isDesider) {
-                desider += i
-                isDesider = false
+            if (isDecider) {
+                decider += i
+                isDecider = false
             } else {
                 chars += i
-                isDesider = true
+                isDecider = true
             }
         }
 
         var result = ""
-        for (i in 0 until desider.length) {
+        for (i in decider.indices) {
 
-            if (shouldSwitch(desider[i])) {
-                result += switch(chars[i])
+            result += if (shouldSwitch(decider[i])) {
+                switch(chars[i])
             } else {
-                result += chars[i]
+                chars[i]
             }
         }
 
@@ -152,27 +153,52 @@ class Pasher(private val activity: Activity) {
             '8' -> '*'
             '9' -> '('
 
-            else -> throw java.lang.RuntimeException("charecter is not lower or number")
+            // we miss some special chars ->   ~`-_=+\|}]{[:;"'/?.><,
+
+            else -> throw java.lang.RuntimeException("character is not lower or number")
         }
     }
 
-    private fun limitIt(input: String) = input.substring(0, CHAR_LIMIT)
+    /**
+    *   substring with dynamic len (PASSWORD_MIN_SIZE..PASSWORD_MIN_SIZE+3) with same possibility
+    * */
+    private fun limitIt(input: String) : String {
+
+        val bit1 =
+                input[input.lastIndex].isLowerCase()
+                ||
+                input[input.lastIndex].isDigit()
+
+        val bit2 =
+                input[input.lastIndex - 1].isLowerCase()
+                ||
+                input[input.lastIndex - 1].isDigit()
+        // this values are 50% true
+
+        return when {
+             bit1 and  bit2 -> input.substring(0, PASSWORD_MIN_SIZE)
+            !bit1 and  bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 1)
+             bit1 and !bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 2)
+            !bit1 and !bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 3)
+            else -> throw java.lang.RuntimeException("this should never happen")
+        }
+    }
 
     private fun alisHashAlgorithm(value: String, listener: PasherListener) {
 
         if (cache.containsKey(value)){
-            listener.onReady(cache.get(value)!!)
+            listener.onReady(cache[value]!!)
             return
         }
 
         Thread {
 
-            // ok! lets pash
+
             var pash: String
 
-            pash = slowIt(value) // 1
-            pash = standardIt(pash) // 2
-            pash = limitIt(pash) // 3
+            pash = slowIt(value)
+            pash = standardIt(pash)
+            pash = limitIt(pash)
 
             cache[value] = pash
             activity.runOnUiThread {
@@ -186,28 +212,23 @@ class Pasher(private val activity: Activity) {
     // public things
 
     /**
-     * password hash
+     * hash to generate password
      * */
     fun pash(masterPass: String, url: String, username: String,isGuest: Boolean, listener: PasherListener ) {
         if (isGuest)
-            alisHashAlgorithm("$masterPass$url$username isGuest", listener)
+            alisHashAlgorithm("$masterPass$url$username GuestMode", listener)
         else
             alisHashAlgorithm("$masterPass$url$username", listener)
 
     }
 
-    fun pash(masterPass: String, url: String, username: String, listener: PasherListener) {
-        pash(masterPass, url, username, false,listener)
-    }
-
     /**
-     * master key hash
+     * master password hash
+     * @return two chars
      * */
     fun mash(masterPass: String, listener: PasherListener) {
         Thread {
-
-            val mash: String = slowIt(masterPass)
-
+            val mash = slowIt(masterPass).substring(0,2)
             activity.runOnUiThread {
                 listener.onReady(mash)
             }

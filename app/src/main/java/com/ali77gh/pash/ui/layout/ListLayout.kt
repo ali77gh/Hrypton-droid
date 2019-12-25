@@ -2,8 +2,6 @@ package com.ali77gh.pash.ui.layout
 
 import android.app.Activity
 import android.content.Context
-import android.service.media.MediaBrowserService
-import android.support.constraint.ConstraintLayout
 import android.support.design.widget.FloatingActionButton
 import android.util.AttributeSet
 import android.view.View
@@ -13,8 +11,7 @@ import android.widget.ListView
 import android.widget.TextView
 import com.ali77gh.pash.R
 import com.ali77gh.pash.data.HistoryRepo
-import com.ali77gh.pash.data.model.History
-import com.ali77gh.pash.ui.adapter.HistoryListViewAdapterJ
+import com.ali77gh.pash.ui.adapter.HistoryListViewAdapter
 import com.ali77gh.pash.ui.dialog.NewPasswordDialog
 import com.ali77gh.pash.ui.dialog.ShowPasswordDialog
 
@@ -50,7 +47,7 @@ class ListLayout(context: Context , attrs: AttributeSet) : FrameLayout(context,a
 
         val histories = repo!!.all.reversed()
 
-        list.adapter = HistoryListViewAdapterJ(activity, histories)
+        list.adapter = HistoryListViewAdapter(activity, histories)
 
         if (histories.isEmpty())
             nothingToShow.visibility = View.VISIBLE

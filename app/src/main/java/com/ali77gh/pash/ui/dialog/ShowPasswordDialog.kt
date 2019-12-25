@@ -77,7 +77,6 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
             }
 
         })
-
     }
 
     private fun putInClipBoard(value :String){

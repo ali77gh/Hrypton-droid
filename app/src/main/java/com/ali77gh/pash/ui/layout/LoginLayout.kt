@@ -36,7 +36,7 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
             val masterPassword = input.text.toString()
 
             //   validation
-            val res = Validation.validateMasterKey(masterPassword)
+            val res = Validation.password(masterPassword)
             if (res != Validation.OK) {
 
                 Toast.makeText(activity, res, Toast.LENGTH_SHORT).show()

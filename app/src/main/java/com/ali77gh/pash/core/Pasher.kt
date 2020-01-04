@@ -60,10 +60,15 @@ class Pasher(private val activity: Activity) {
         for (i in decider.indices) {
 
             result += if (shouldSwitch(decider[i])) {
-                switch(chars[i])
+                cipher(chars[i])
             } else {
                 chars[i]
             }
+        }
+
+        if (Validation.password(result.substring(0,PASSWORD_MIN_SIZE)) != ""){
+            result = sha256(result)
+            result = standardIt(result)
         }
 
         return result
@@ -109,11 +114,11 @@ class Pasher(private val activity: Activity) {
             '8' -> false
             '9' -> false
 
-            else -> throw java.lang.RuntimeException("charecter is not lower or number")
+            else -> throw java.lang.RuntimeException("character is not lower case or number")
         }
     }
 
-    private fun switch(input: Char): Char {
+    private fun cipher(input: Char): Char {
 
         return when (input) {
             'a' -> 'A'
@@ -160,7 +165,7 @@ class Pasher(private val activity: Activity) {
     }
 
     /**
-    *   substring with dynamic len (PASSWORD_MIN_SIZE..PASSWORD_MIN_SIZE+3) with same possibility
+    *   substring with dynamic size (PASSWORD_MIN_SIZE..PASSWORD_MIN_SIZE+3) with same possibility
     * */
     private fun limitIt(input: String) : String {
 

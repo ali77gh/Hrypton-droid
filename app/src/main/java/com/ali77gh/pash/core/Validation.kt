@@ -8,75 +8,41 @@ object Validation {
 
     val OK = "OK"
 
-    private val nums = listOf("0","1","2","3","4","5","6","7","8","9")
-    private val specialChars = listOf(")","!","@","#","$","%","^","&","*","(")
-    private val lowers = listOf("a","b","c","d","e","f","g","h","i","j","k","m","n","l","o","p","q","r","s","t","u","v","w","x","y","z")
-    private val uppers = listOf("A","B","C","D","E","F","G","H","I","J","K","M","N","L","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+    private val allowedSpecialChars = listOf('!', '@', '#', '$', '%', '^', '&', '*', '(' , ')')
 
-    fun validateMasterKey(masterkey: String): String{
+    fun password(password: String): String {
 
 
-        if (masterkey.contains(" ")){
-            return "should not have space"
+        var haveDigit = false
+        var haveUpper = false
+        var haveLower = false
+        var haveSpecialChar = false
+
+        for (i in password) {
+
+            when {
+                i.isDigit() -> haveDigit = true
+                i.isUpperCase() -> haveUpper = true
+                i.isLowerCase() -> haveLower = true
+                i.isSpecialChar() -> haveSpecialChar = true
+                i == ' ' -> return "space is not allowed"
+                else -> return "char \"$i\" not allowed"
+            }
+
         }
 
-        if (masterkey.length < 10){
+        if (!haveDigit) return "password should have numbers"
+        if (!haveUpper) return "password should have upper case letters"
+        if (!haveLower) return "password should have lower case letters"
+        if (!haveSpecialChar) return "password should have special char"
+
+        if (password.length < 10) {
             return "master key should be more then 10 characters"
         }
 
-        if (!haveNum(masterkey)){
-            return "master key should contains numbers"
-        }
-
-        if (!haveSpecialChar(masterkey)){
-            return "master key should contains special chars"
-        }
-
-        if (!haveUpper(masterkey)){
-            return "master key should contains upper case letters"
-        }
-
-        if (!haveLower(masterkey)){
-            return "master key should contains lower case letters"
-        }
-
-        return "OK"
+        return OK
 
     }
 
-    private fun haveNum(masterkey: String): Boolean{
-
-        for (i in nums)
-            if (masterkey.contains(i))
-                return true
-
-        return false
-    }
-
-    private fun haveSpecialChar(masterkey: String): Boolean{
-
-        for (i in specialChars)
-            if (masterkey.contains(i))
-                return true
-
-        return false
-    }
-
-    private fun haveUpper(masterkey: String): Boolean{
-
-        for (i in uppers)
-            if (masterkey.contains(i))
-                return true
-
-        return false
-    }
-
-    private fun haveLower(masterkey: String): Boolean{
-
-        for (i in lowers)
-            if (masterkey.contains(i))
-                return true
-
-        return false
-    }
+    private fun Char.isSpecialChar() = allowedSpecialChars.contains(this)
 }

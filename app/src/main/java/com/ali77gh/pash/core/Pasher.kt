@@ -1,23 +1,25 @@
 package com.ali77gh.pash.core
 
-import android.app.Activity
+
 import java.security.MessageDigest
 
-class Pasher(private val activity: Activity) {
+object Pasher {
 
     //config
-    private val HASH_LIEARS_COUNT = 50_000
-    private val PASSWORD_MIN_SIZE = 12 //max size is min+3
+    private val HASH_LIEARS_COUNT = 50_000 // increase this make algorithm slower
+    private val PASSWORD_MIN_SIZE = 12 //if you want to increase PASSWORD_MIN_SIZE use sha-512
+    //max size is min+3
 
+    // caching
+    private val cache = mutableMapOf<String,String>()
 
-    companion object{
-        val cache = mutableMapOf<String,String>()
-    }
-
-    private fun sha256(base: String): String {
+    /**
+     * @return 64 lower case and numbers
+     * */
+    private fun sha256(input: String): String {
         try {
             val digest = MessageDigest.getInstance("SHA-256")
-            val hash = digest.digest(base.toByteArray(charset("UTF-8")))
+            val hash = digest.digest(input.toByteArray(charset("UTF-8")))
             val hexString = StringBuffer()
 
             for (i in hash.indices) {
@@ -33,6 +35,10 @@ class Pasher(private val activity: Activity) {
 
     }
 
+    /**
+     *  calling hash many times to make reverse (crack) harder
+     *  @return 64 lower case and numbers
+     * */
     private fun slowIt(input: String): String {
         var value = input
         for (i in 0..HASH_LIEARS_COUNT) {
@@ -41,131 +47,141 @@ class Pasher(private val activity: Activity) {
         return value
     }
 
-    private fun standardIt(input: String): String {
+    /**
+     * sha-256 output is just lower case and numbers
+     * this method will add upper case and special chars for make it standard
+     * @return 32 lower case and upper case and numbers and allowed special chars
+     * */
+    private object Standard {
 
-        var chars = ""
-        var decider = ""
-        var isDecider = true
-        for (i in input) {
-            if (isDecider) {
-                decider += i
-                isDecider = false
-            } else {
-                chars += i
-                isDecider = true
+        /**
+         * @param input decider (lowercase or number)
+         * */
+        fun shouldSwitch(input: Char): Boolean {
+
+            return when (input) {
+                'a' -> true
+                'b' -> true
+                'c' -> true
+                'd' -> true
+                'e' -> true
+                'f' -> true
+                'g' -> true
+                'h' -> true
+                'i' -> true
+                'j' -> true
+                'k' -> true
+                'm' -> true
+                'n' -> true
+                'l' -> true
+                'o' -> true
+                'p' -> true
+                'q' -> true
+                'r' -> true
+                's' -> false
+                't' -> false
+                'u' -> false
+                'v' -> false
+                'w' -> false
+                'x' -> false
+                'y' -> false
+                'z' -> false
+                '0' -> false
+                '1' -> false
+                '2' -> false
+                '3' -> false
+                '4' -> false
+                '5' -> false
+                '6' -> false
+                '7' -> false
+                '8' -> false
+                '9' -> false
+
+                else -> throw java.lang.RuntimeException("character is not lower case or number")
             }
         }
 
-        var result = ""
-        for (i in decider.indices) {
+        /**
+         * char replacement map
+         * @param input lower case and number
+         * @return      upper case and allowed special chars
+         * */
+        fun switch(input: Char): Char {
 
-            result += if (shouldSwitch(decider[i])) {
-                cipher(chars[i])
-            } else {
-                chars[i]
+            return when (input) {
+                // used in both calls
+                'a' -> 'A'
+                'b' -> 'B'
+                'c' -> 'C'
+                'd' -> 'D'
+                'e' -> 'E'
+                'f' -> 'F'
+                'g' -> 'G'
+                'h' -> 'H'
+                'i' -> 'I'
+                'j' -> 'J'
+                'k' -> 'K'
+                'm' -> 'M'
+                'n' -> 'N'
+                'l' -> 'L'
+                'o' -> 'O'
+                'p' -> 'P'
+                'q' -> 'Q'
+                'r' -> 'R'
+                's' -> 'S'
+                't' -> 'T'
+                'u' -> 'U'
+                'v' -> 'V'
+                'w' -> 'W'
+                'x' -> 'X'
+                'y' -> 'Y'
+                'z' -> 'Z'
+                '0' -> ')'
+                '1' -> '!'
+                '2' -> '@'
+                '3' -> '#'
+                '4' -> '$'
+                '5' -> '%'
+                '6' -> '^'
+                '7' -> '&'
+                '8' -> '*'
+                '9' -> '('
+
+                // we miss some special chars ->   ~`-_=+\|}]{[:;"'/?.><,
+
+                else -> throw java.lang.RuntimeException("character is not lower or number")
             }
         }
 
-        if (Validation.password(result.substring(0,PASSWORD_MIN_SIZE)) != ""){
-            result = sha256(result)
-            result = standardIt(result)
+        fun main(input: String) :String{
+            val chars = input.substring(0,32)
+            val decider = input.substring(32,64)
+
+            var result = ""
+            for (i in decider.indices) {
+
+                result += if (shouldSwitch(decider[i])) {
+                    switch(chars[i])
+                } else {
+                    chars[i]
+                }
+            }
+
+            //if its not standard try one more hash
+            //(to make sure output is standard password and website validator gonna accept it)
+            if (Validation.password(result.substring(0,PASSWORD_MIN_SIZE)) != Validation.OK){
+                result = sha256(result)
+                result = main(result)
+            }
+
+            return result
         }
 
-        return result
     }
 
-    private fun shouldSwitch(input: Char): Boolean {
-
-        return when (input) {
-            'a' -> true
-            'b' -> true
-            'c' -> true
-            'd' -> true
-            'e' -> true
-            'f' -> true
-            'g' -> true
-            'h' -> true
-            'i' -> true
-            'j' -> true
-            'k' -> true
-            'm' -> true
-            'n' -> true
-            'l' -> true
-            'o' -> true
-            'p' -> true
-            'q' -> true
-            'r' -> true
-            's' -> false
-            't' -> false
-            'u' -> false
-            'v' -> false
-            'w' -> false
-            'x' -> false
-            'y' -> false
-            'z' -> false
-            '0' -> false
-            '1' -> false
-            '2' -> false
-            '3' -> false
-            '4' -> false
-            '5' -> false
-            '6' -> false
-            '7' -> false
-            '8' -> false
-            '9' -> false
-
-            else -> throw java.lang.RuntimeException("character is not lower case or number")
-        }
-    }
-
-    private fun cipher(input: Char): Char {
-
-        return when (input) {
-            'a' -> 'A'
-            'b' -> 'B'
-            'c' -> 'C'
-            'd' -> 'D'
-            'e' -> 'E'
-            'f' -> 'F'
-            'g' -> 'G'
-            'h' -> 'H'
-            'i' -> 'I'
-            'j' -> 'J'
-            'k' -> 'K'
-            'm' -> 'M'
-            'n' -> 'N'
-            'l' -> 'L'
-            'o' -> 'O'
-            'p' -> 'P'
-            'q' -> 'Q'
-            'r' -> 'R'
-            's' -> 'S'
-            't' -> 'T'
-            'u' -> 'U'
-            'v' -> 'V'
-            'w' -> 'W'
-            'x' -> 'X'
-            'y' -> 'Y'
-            'z' -> 'Z'
-            '0' -> ')'
-            '1' -> '!'
-            '2' -> '@'
-            '3' -> '#'
-            '4' -> '$'
-            '5' -> '%'
-            '6' -> '^'
-            '7' -> '&'
-            '8' -> '*'
-            '9' -> '('
-
-            // we miss some special chars ->   ~`-_=+\|}]{[:;"'/?.><,
-
-            else -> throw java.lang.RuntimeException("character is not lower or number")
-        }
-    }
 
     /**
-    *   substring with dynamic size (PASSWORD_MIN_SIZE..PASSWORD_MIN_SIZE+3) with same possibility
+    * @return chars with dynamic size (PASSWORD_MIN_SIZE..PASSWORD_MIN_SIZE+3) with same possibility
     * */
     private fun limitIt(input: String) : String {
 
@@ -189,54 +205,54 @@ class Pasher(private val activity: Activity) {
         }
     }
 
-    private fun alisHashAlgorithm(value: String, listener: PasherListener) {
-
-        if (cache.containsKey(value)){
-            listener.onReady(cache[value]!!)
-            return
-        }
+    /**
+     * @param listener this callback called when password is ready (not in ui thread)
+     * */
+    private fun mainAlgorithm(value: String, listener: PasherListener) {
 
         Thread {
 
+            if (cache.containsKey(value)){
+                listener.onReady(cache[value]!!)
+                return@Thread
+            }
 
             var pash: String
 
             pash = slowIt(value)
-            pash = standardIt(pash)
+            pash = Standard.main(pash)
             pash = limitIt(pash)
 
-            cache[value] = pash
-            activity.runOnUiThread {
+            listener.onReady(pash) // go ;)
 
-                listener.onReady(pash) // go ;)
-            }
+            cache[value] = pash // push to cache
 
         }.start()
     }
 
-    // public things
+
+
+    // public methods
 
     /**
      * hash to generate password
      * */
     fun pash(masterPass: String, url: String, username: String,isGuest: Boolean, listener: PasherListener ) {
         if (isGuest)
-            alisHashAlgorithm("$masterPass$url$username GuestMode", listener)
+            mainAlgorithm("$masterPass$url$username GuestMode", listener)
         else
-            alisHashAlgorithm("$masterPass$url$username", listener)
+            mainAlgorithm("$masterPass$url$username", listener)
 
     }
 
     /**
-     * master password hash
+     * master password hash (to find out this master password is the previous one or not)
      * @return two chars
      * */
     fun mash(masterPass: String, listener: PasherListener) {
         Thread {
-            val mash = slowIt(masterPass).substring(0,2)
-            activity.runOnUiThread {
-                listener.onReady(mash)
-            }
+
+            listener.onReady(slowIt(masterPass).substring(0,2))
 
         }.start()
     }

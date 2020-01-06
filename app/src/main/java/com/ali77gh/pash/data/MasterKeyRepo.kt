@@ -47,10 +47,12 @@ class MasterKeyRepo(var activity: Activity) {
 
     fun hashSave(masterKey: String, listener: PasherListener) {
 
-        Pasher(activity).mash(masterKey, object :PasherListener{
+        Pasher.mash(masterKey, object :PasherListener{
             override fun onReady(hashedMasterKey: String) {
-                repo!!.Save(hashFileName, hashedMasterKey)
-                listener.onReady("")
+                activity.runOnUiThread {
+                    repo!!.Save(hashFileName, hashedMasterKey)
+                    listener.onReady("")
+                }
             }
         })
     }
@@ -61,10 +63,11 @@ class MasterKeyRepo(var activity: Activity) {
 
     fun hashCheckSame(masterKey: String,listener: MasterKeyHashCheckListener){
 
-        Pasher(activity).mash(masterKey,object :PasherListener{
+        Pasher.mash(masterKey,object :PasherListener{
             override fun onReady(hashedMasterKey: String) {
-
-                listener.onReady(hashedMasterKey==hashLoad())
+                activity.runOnUiThread {
+                    listener.onReady(hashedMasterKey == hashLoad())
+                }
             }
         })
     }

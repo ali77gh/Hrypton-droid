@@ -64,16 +64,18 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
         this.pass = ""
         guest?.isEnabled = false
 
-        Pasher(activity).pash(MainActivity.masterKey, history.url, history.username,isGuest, object : PasherListener {
+        Pasher.pash(MainActivity.masterKey, history.url, history.username,isGuest, object : PasherListener {
             override fun onReady(pass: String) {
-                progress?.stop(cb = {
-                    copy?.visibility = VISIBLE
-                    progress?.visibility = GONE
-                    password?.visibility = VISIBLE
-                    password?.text = pass
-                    this@ShowPasswordDialog.pass = pass
-                    guest?.isEnabled = true
-                })
+                activity.runOnUiThread{
+                    progress?.stop(cb = {
+                        copy?.visibility = VISIBLE
+                        progress?.visibility = GONE
+                        password?.visibility = VISIBLE
+                        password?.text = pass
+                        this@ShowPasswordDialog.pass = pass
+                        guest?.isEnabled = true
+                    })
+                }
             }
 
         })

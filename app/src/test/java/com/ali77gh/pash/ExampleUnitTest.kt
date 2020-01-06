@@ -1,10 +1,10 @@
 package com.ali77gh.pash
 
-import com.ali77gh.pash.core.Validation
 
+import com.ali77gh.pash.core.Pasher
+import com.ali77gh.pash.core.PasherListener
 import org.junit.Test
 
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -16,6 +16,13 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
 
-        print(Validation.password("fsajkfنfasfk"))
+
+        Pasher.pash("masterPassword","test.com","username",false,object : PasherListener {
+            override fun onReady(pass: String) {
+               print(pass)
+            }
+
+        })
     }
+
 }

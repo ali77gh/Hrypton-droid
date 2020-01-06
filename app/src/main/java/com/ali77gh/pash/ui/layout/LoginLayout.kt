@@ -3,7 +3,11 @@ package com.ali77gh.pash.ui.layout
 import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.AppCompatCheckBox
+import android.text.InputType
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
+import android.view.ViewGroup
 import android.widget.*
 
 import com.ali77gh.pash.R
@@ -18,11 +22,11 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
 
     lateinit var listener: LoginLayoutListener
 
-
     fun render(activity: Activity) {
-        val root = activity.layoutInflater.inflate(R.layout.layout_login, null) as LinearLayout
+        val root = activity.layoutInflater.inflate(R.layout.layout_login, null) as ViewGroup
 
-        val input = root.findViewById<EditText>(R.id.text_home_password)
+        val input = root.findViewById<EditText>(R.id.text_login_password)
+        val passwordVisibility = root.findViewById<ImageView>(R.id.img_login_password_visible)
         val rememberMe = root.findViewById<AppCompatCheckBox>(R.id.check_remember_me)
         val enter = root.findViewById<Button>(R.id.btn_login)
         val progressbar = root.findViewById<FuckingCoolProgressbar>(R.id.progressbar_login)
@@ -30,6 +34,19 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
         progressbar.render(activity)
 
         val masterKeyRepo = MasterKeyRepo(activity)
+
+        var isPasswordMode = true
+        passwordVisibility.setOnClickListener {
+
+            if (isPasswordMode){
+                input.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                passwordVisibility.setImageResource(R.drawable.login_hide_password)
+            } else{
+                input.transformationMethod = PasswordTransformationMethod.getInstance()
+                passwordVisibility.setImageResource(R.drawable.login_show_password)
+            }
+            isPasswordMode = !isPasswordMode
+        }
 
         enter.setOnClickListener {
 
@@ -132,6 +149,8 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
 
         this.addView(root)
     }
+
+
 
     interface LoginLayoutListener {
         fun onReady(masterKey: String)

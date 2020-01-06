@@ -17,7 +17,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/shape_primary_gradiant">
+        android:background="@drawable/shape_primary_gradient">
 
 
         <ImageView
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.ali77gh.pash.ui.layout.ListLayout
+        <com.ali77gh.pash.ui.layout.HomeLayout
             android:id="@+id/home_list_layout"
             android:layout_marginTop="100dp"
             android:layout_width="match_parent"

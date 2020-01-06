@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Gravity
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -12,10 +11,8 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import com.ali77gh.pash.R
-import com.ali77gh.pash.data.HistoryRepo
 import com.ali77gh.pash.data.MasterKeyRepo
-import com.ali77gh.pash.data.model.History
-import com.ali77gh.pash.ui.layout.ListLayout
+import com.ali77gh.pash.ui.layout.HomeLayout
 import com.ali77gh.pash.ui.layout.LoginLayout
 
 
@@ -34,8 +31,6 @@ class MainActivity : AppCompatActivity() {
         setupStatusBar()
         setupDrawer()
         setupLayouts()
-        test()
-
     }
 
     override fun onBackPressed() {
@@ -92,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupLayouts(){
 
         val loginLayout = findViewById<LoginLayout>(R.id.home_login_layout)
-        val listLayout = findViewById<ListLayout>(R.id.home_list_layout)
+        val listLayout = findViewById<HomeLayout>(R.id.home_list_layout)
 
         val masterKeyRepo = MasterKeyRepo(this)
         if (masterKeyRepo.selfIsExist()){
@@ -125,61 +120,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun test(){
 
-        val masterKeyRepo = MasterKeyRepo(this)
-
-        //master key self
-
-//        Log.d(".selfIsExist()", masterKeyRepo.selfIsExist().toString())
-//
-//        masterKeyRepo.selfSave("masterKeyTest")
-//        Log.d("master key saved.","")
-//
-//        Log.d(".selfIsExist()", masterKeyRepo.selfIsExist().toString())
-//
-//        Log.d(".selfLoad()", masterKeyRepo.selfLoad())
-
-
-        //master key hash
-
-        Log.d(".hashIsExist()", masterKeyRepo.hashIsExist().toString())
-//
-//        masterKeyRepo.hashSave("master key",object :PasherListener{
-//            override fun onReady(pass: String) {
-//
-//                Log.d(".hashIsExist",masterKeyRepo.hashIsExist().toString())
-//
-//                Log.d(".hashLoad",masterKeyRepo.hashLoad())
-//
-//                masterKeyRepo.hashCheckSame("masterkey",object :MasterKeyRepo.MasterKeyHashCheckListener{
-//                    override fun onReady(isMatch: Boolean) {
-//                        Log.d(".isMatch",isMatch.toString())
-//                    }
-//
-//                })
-//            }
-//        })
-
-        //history
-
-//        val historyRepo = HistoryRepo(this)
-//
-//        Log.d("size:",historyRepo.all.size.toString())
-//
-//        historyRepo.Insert(History("instagram.com","ali77gh"))
-//        historyRepo.Insert(History("gmail.com","alighahremani1377@gmail.com"))
-//        historyRepo.Insert(History("virgol.ir","ali77gh"))
-//        historyRepo.Insert(History("telegram.com","ali77gha"))
-//        historyRepo.Insert(History("fandogh.cloud","ali77gh"))
-//
-//        Log.d("size:",historyRepo.all.size.toString())
-//
-//        //historyRepo.Remove(historyRepo.all[0].key)
-//
-//        Log.d("size:",historyRepo.all.size.toString())
-
-
-
-    }
 }

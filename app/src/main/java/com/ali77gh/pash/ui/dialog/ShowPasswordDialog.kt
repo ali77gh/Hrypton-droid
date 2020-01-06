@@ -11,12 +11,11 @@ import android.widget.TextView
 import com.ali77gh.pash.R
 import com.ali77gh.pash.core.Pasher
 import com.ali77gh.pash.core.PasherListener
-import com.ali77gh.pash.data.model.History
 import com.ali77gh.pash.ui.activity.MainActivity
 import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
 
 
-class ShowPasswordDialog(activity: Activity, private val history: History) : BaseDialog(activity) {
+class ShowPasswordDialog(activity: Activity, private val username: String,private val url:String) : BaseDialog(activity) {
 
     var pass : String = ""
 
@@ -58,18 +57,16 @@ class ShowPasswordDialog(activity: Activity, private val history: History) : Bas
     private fun startPashing(isGuest :Boolean){
 
         copy?.visibility = GONE
-        progress?.visibility = VISIBLE
         progress?.start()
         password?.visibility = GONE
         this.pass = ""
         guest?.isEnabled = false
 
-        Pasher.pash(MainActivity.masterKey, history.url, history.username,isGuest, object : PasherListener {
+        Pasher.pash(MainActivity.masterKey, url, username,isGuest, object : PasherListener {
             override fun onReady(pass: String) {
                 activity.runOnUiThread{
                     progress?.stop(cb = {
                         copy?.visibility = VISIBLE
-                        progress?.visibility = GONE
                         password?.visibility = VISIBLE
                         password?.text = pass
                         this@ShowPasswordDialog.pass = pass

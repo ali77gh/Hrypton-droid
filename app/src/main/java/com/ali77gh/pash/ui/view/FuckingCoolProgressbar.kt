@@ -3,6 +3,7 @@ package com.ali77gh.pash.ui.view
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -52,6 +53,7 @@ class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayou
     }
 
     fun start(){
+        this.visibility = View.VISIBLE
         ExpandAndCollapse.expandTo(parent!!,Tools.DpToPixel(120f))
         fadeLoop!!.animate()
     }
@@ -59,7 +61,10 @@ class FuckingCoolProgressbar(context: Context, attrs: AttributeSet) : FrameLayou
     fun stop(cb : ()->Unit){
         ExpandAndCollapse.collapse(parent!!)
         fadeLoop!!.stopAnimate()
-        parent!!.postDelayed(cb,duration.toLong())
+        parent!!.postDelayed({
+            cb()
+            this.visibility = View.GONE
+        },duration.toLong())
     }
 
     private fun putRandomChar(label :TextView){

@@ -12,7 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.ali77gh.pash.R
 import com.ali77gh.pash.data.MasterPasswordRepo
-import com.ali77gh.pash.ui.dialog.AreYouSureForgot
+import com.ali77gh.pash.ui.dialog.AreYouSureForgotDialog
 import com.ali77gh.pash.ui.layout.HomeLayout
 import com.ali77gh.pash.ui.layout.LoginLayout
 
@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             forgotPasswordIcon.visibility = GONE
 
         forgotPasswordIcon.setOnClickListener {
-            AreYouSureForgot(this) {
+            AreYouSureForgotDialog(this) {
                 repo.selfRemove()
                 this.finish()
             }.show()

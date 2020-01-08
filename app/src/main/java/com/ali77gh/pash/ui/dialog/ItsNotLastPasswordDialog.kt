@@ -5,21 +5,21 @@ import android.os.Bundle
 import android.widget.TextView
 import com.ali77gh.pash.R
 
-class AreYouSureForgot(activity: Activity) : BaseDialog(activity) {
+class ItsNotLastPasswordDialog(activity: Activity) : BaseDialog(activity) {
 
     private lateinit var callback : () -> Unit
 
     constructor(activity: Activity,cb :() -> Unit) : this(activity) {
-        callback = cb
+            callback = cb
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.dialog_are_you_sure_forgot)
+        setContentView(R.layout.dialog_its_not_last_pass)
 
-        val no = findViewById<TextView>(R.id.btn_forgot_no)
-        val yes = findViewById<TextView>(R.id.btn_forgot_yes)
+        val no = findViewById<TextView>(R.id.btn_last_pass_no)
+        val yes = findViewById<TextView>(R.id.btn_last_pass_yes)
 
         no.setOnClickListener {
             dismiss()
@@ -29,6 +29,5 @@ class AreYouSureForgot(activity: Activity) : BaseDialog(activity) {
             callback()
             dismiss()
         }
-
     }
 }

@@ -14,7 +14,7 @@ import com.ali77gh.pash.core.Pasher
 import com.ali77gh.pash.core.PasherListener
 import com.ali77gh.pash.core.Validation
 import com.ali77gh.pash.data.MasterPasswordRepo
-import com.ali77gh.pash.ui.dialog.ItsNotLastPassword
+import com.ali77gh.pash.ui.dialog.ItsNotLastPasswordDialog
 import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
 
 class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
@@ -92,7 +92,7 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
                                     }
 
                                 } else {
-                                    ItsNotLastPassword(activity, cb = {
+                                    ItsNotLastPasswordDialog(activity, cb = {
                                         if (rememberMe.isChecked) {
 
                                             masterKeyRepo.selfSave(masterPassword)

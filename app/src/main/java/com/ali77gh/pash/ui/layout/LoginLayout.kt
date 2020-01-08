@@ -3,7 +3,6 @@ package com.ali77gh.pash.ui.layout
 import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.AppCompatCheckBox
-import android.text.InputType
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
@@ -14,7 +13,7 @@ import com.ali77gh.pash.R
 import com.ali77gh.pash.core.Pasher
 import com.ali77gh.pash.core.PasherListener
 import com.ali77gh.pash.core.Validation
-import com.ali77gh.pash.data.MasterKeyRepo
+import com.ali77gh.pash.data.MasterPasswordRepo
 import com.ali77gh.pash.ui.dialog.ItsNotLastPassword
 import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
 
@@ -33,7 +32,7 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
 
         progressbar.render(activity)
 
-        val masterKeyRepo = MasterKeyRepo(activity)
+        val masterKeyRepo = MasterPasswordRepo(activity)
 
         var isPasswordMode = true
         passwordVisibility.setOnClickListener {

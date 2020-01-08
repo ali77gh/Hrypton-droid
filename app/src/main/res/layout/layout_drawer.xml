@@ -80,24 +80,6 @@
             android:textSize="20sp"
             android:textColor="@color/black"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/black"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
-
-        <TextView
-            android:id="@+id/drawer_forgot_master_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="forgot master key"
-            android:textSize="20sp"
-            android:textColor="@color/black"/>
-
     </LinearLayout>
-
-
 
 </ScrollView>

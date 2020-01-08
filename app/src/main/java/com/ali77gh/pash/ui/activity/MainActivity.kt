@@ -11,7 +11,8 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import com.ali77gh.pash.R
-import com.ali77gh.pash.data.MasterKeyRepo
+import com.ali77gh.pash.data.MasterPasswordRepo
+import com.ali77gh.pash.ui.dialog.AreYouSureForgot
 import com.ali77gh.pash.ui.layout.HomeLayout
 import com.ali77gh.pash.ui.layout.LoginLayout
 
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         setupStatusBar()
         setupDrawer()
         setupLayouts()
+        setupForgotPassword()
     }
 
     override fun onBackPressed() {
@@ -65,13 +67,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        findViewById<TextView>(R.id.drawer_forgot_master_password).setOnClickListener {
-
-            MasterKeyRepo(this).selfRemove()
-            finish()
-            //todo its not working
-        }
-
     }
 
     private fun setupStatusBar(){
@@ -89,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         val loginLayout = findViewById<LoginLayout>(R.id.home_login_layout)
         val listLayout = findViewById<HomeLayout>(R.id.home_list_layout)
 
-        val masterKeyRepo = MasterKeyRepo(this)
+        val masterKeyRepo = MasterPasswordRepo(this)
         if (masterKeyRepo.selfIsExist()){
 
             listLayout.render(this)
@@ -114,11 +109,29 @@ class MainActivity : AppCompatActivity() {
                         listLayout.alpha = 0.0F
                         listLayout.visibility = VISIBLE
                         listLayout.animate().alpha(1.0F).setDuration(200).start()
+                        setupForgotPassword()
                     },250)
                 }
             }
         }
     }
 
+    private fun setupForgotPassword(){
 
+        val repo = MasterPasswordRepo(this)
+        val forgotPasswordIcon = findViewById<ImageView>(R.id.image_home_forgot_master_password)
+
+        if(repo.selfIsExist())
+            forgotPasswordIcon.visibility = VISIBLE
+        else
+            forgotPasswordIcon.visibility = GONE
+
+        forgotPasswordIcon.setOnClickListener {
+            AreYouSureForgot(this) {
+                repo.selfRemove()
+                this.finish()
+            }.show()
+        }
+
+    }
 }

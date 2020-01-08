@@ -6,7 +6,7 @@ import com.ali77gh.pash.core.PasherListener
 import com.example.easyrepolib.abstracts.GRepo
 import com.example.easyrepolib.repos.StringDAO
 
-class MasterKeyRepo(var activity: Activity) {
+class MasterPasswordRepo(var activity: Activity) {
 
     var repo: StringDAO? = null
 

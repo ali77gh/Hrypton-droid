@@ -2,6 +2,8 @@ package com.ali77gh.pash.ui.layout
 
 import android.app.Activity
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.appcompat.widget.AppCompatCheckBox
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -56,8 +58,7 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
             val res = Validation.password(masterPassword)
             if (res != Validation.OK) {
 
-                input.error = res
-                Toast.makeText(activity, res, Toast.LENGTH_SHORT).show()
+                showError(input,res)
                 return@setOnClickListener
             }
 
@@ -149,6 +150,27 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
         }
 
         this.addView(root)
+    }
+
+    private fun showError(input:TextInputEditText,msg:String){
+        val errorBox = findViewById<TextView>(R.id.text_master_password_input_error)
+
+        errorBox.text = msg
+
+        input.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                errorBox.text = ""
+            }
+
+        })
     }
 
 

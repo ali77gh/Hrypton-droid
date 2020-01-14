@@ -2,17 +2,19 @@ package com.ali77gh.pash.core
 
 object Validation {
 
-    private val minSize = 10
+    private const val minSize = 10
 
     /**
      * @return error (if its ok returns "OK")
      * */
 
-    val OK = "OK"
+    const val OK = "OK"
 
-    private val allowedSpecialChars = "//~!@#\$%^&*_-+=`|\\(){}[]:;\"'<>,.?/"
+    private const val allowedSpecialChars = "//~!@#\$%^&*_-+=`|\\(){}[]:;\"'<>,.?/"
 
     fun password(password: String): String {
+
+        if(password == "") return "is empty"
 
 
         var haveDigit = false
@@ -33,17 +35,43 @@ object Validation {
 
         }
 
-        if (!haveDigit) return "password should have numbers"
-        if (!haveUpper) return "password should have upper case letters"
-        if (!haveLower) return "password should have lower case letters"
-        if (!haveSpecialChar) return "password should have special char"
+        if (!haveDigit) return "should have numbers"
+        if (!haveUpper) return "should have upper case letters"
+        if (!haveLower) return "should have lower case letters"
+        if (!haveSpecialChar) return "should have special chars"
 
         if (password.length < minSize) {
-            return "master key should be more then 10 characters"
+            return "should be more then 10 chars"
         }
 
         return OK
 
+    }
+
+    fun website(website:String):String{
+
+        if(website == "") return "is empty"
+
+        if (!website.contains('.'))
+            return "should have .com , .org ,..."
+
+        if (website.contains(' '))
+            return "space is not allowed"
+        //todo
+
+        return OK
+    }
+
+    fun username(username:String):String{
+
+        if(username == "") return "is empty"
+
+
+        if (username.contains(' '))
+            return "space is not allowed"
+        //todo
+
+        return OK
     }
 
     private fun Char.isSpecialChar() = allowedSpecialChars.contains(this)

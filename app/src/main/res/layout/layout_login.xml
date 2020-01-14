@@ -12,7 +12,7 @@
         android:layout_height="120dp"
         android:visibility="gone"/>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:hint="master password"
             app:counterEnabled="true"
-            android:layout_marginLeft="40dp">
+            android:layout_marginLeft="30dp"
+            android:layout_gravity="left">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/text_login_password"
@@ -41,9 +42,18 @@
             android:tint="@color/colorPrimary"
             android:padding="6dp"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="4dp"
+            android:layout_marginLeft="220dp"
             android:layout_marginBottom="6dp"/>
-    </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_master_password_input_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:layout_marginLeft="25dp"
+            android:textColor="@color/red"
+            android:textSize="11sp"/>
+    </FrameLayout>
 
 
     <androidx.appcompat.widget.AppCompatCheckBox

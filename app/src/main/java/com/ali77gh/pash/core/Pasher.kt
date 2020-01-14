@@ -6,7 +6,7 @@ import java.security.MessageDigest
 object Pasher {
 
     //config
-    private val HASH_LIEARS_COUNT = 50_000 // increase this make algorithm slower
+    private val HASH_LAYERS_COUNT = 50_000 // increase this make algorithm slower (and safer)
     private val PASSWORD_MIN_SIZE = 12 //if you want to increase PASSWORD_MIN_SIZE use sha-512
     //max size is min+3
 
@@ -41,7 +41,7 @@ object Pasher {
      * */
     private fun slowIt(input: String): String {
         var value = input
-        for (i in 0..HASH_LIEARS_COUNT) {
+        for (i in 0..HASH_LAYERS_COUNT) {
             value = sha256(value)
         }
         return value

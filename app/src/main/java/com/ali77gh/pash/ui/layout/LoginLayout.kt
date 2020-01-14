@@ -2,7 +2,7 @@ package com.ali77gh.pash.ui.layout
 
 import android.app.Activity
 import android.content.Context
-import android.support.v7.widget.AppCompatCheckBox
+import androidx.appcompat.widget.AppCompatCheckBox
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
@@ -16,6 +16,7 @@ import com.ali77gh.pash.core.Validation
 import com.ali77gh.pash.data.MasterPasswordRepo
 import com.ali77gh.pash.ui.dialog.ItsNotLastPasswordDialog
 import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
+import com.google.android.material.textfield.TextInputEditText
 
 class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
 
@@ -24,7 +25,7 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
     fun render(activity: Activity) {
         val root = activity.layoutInflater.inflate(R.layout.layout_login, null) as ViewGroup
 
-        val input = root.findViewById<EditText>(R.id.text_login_password)
+        val input = root.findViewById<TextInputEditText>(R.id.text_login_password)
         val passwordVisibility = root.findViewById<ImageView>(R.id.img_login_password_visible)
         val rememberMe = root.findViewById<AppCompatCheckBox>(R.id.check_remember_me)
         val enter = root.findViewById<Button>(R.id.btn_login)
@@ -55,6 +56,7 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
             val res = Validation.password(masterPassword)
             if (res != Validation.OK) {
 
+                input.error = res
                 Toast.makeText(activity, res, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -148,7 +150,6 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
 
         this.addView(root)
     }
-
 
 
     interface LoginLayoutListener {

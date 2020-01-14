@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
     android:orientation="vertical">
-
 
     <com.ali77gh.pash.ui.view.FuckingCoolProgressbar
         android:id="@+id/progressbar_login"
@@ -12,27 +12,26 @@
         android:layout_height="120dp"
         android:visibility="gone"/>
 
-
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/shape_edit_text">
-        <EditText
-            android:id="@+id/text_login_password"
-            android:layout_width="160dp"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:background="@null"
             android:hint="master password"
-            android:inputType="textPassword"
-            android:lines="1"
-            android:singleLine="true"
-            android:paddingLeft="15dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/gray" />
+            app:counterEnabled="true"
+            android:layout_marginLeft="40dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:lines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/img_login_password_visible"
@@ -41,15 +40,17 @@
             android:src="@drawable/login_show_password"
             android:tint="@color/colorPrimary"
             android:padding="6dp"
-            android:layout_marginRight="4dp"/>
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="6dp"/>
     </LinearLayout>
 
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/check_remember_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:buttonTint="@color/colorPrimary"
         android:color="@color/colorPrimary"
         android:paddingRight="90dp"
@@ -62,6 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/shape_button"
+        android:background="@drawable/app_button"
         android:text="enter" />
 </LinearLayout>

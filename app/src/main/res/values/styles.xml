@@ -1,7 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -13,11 +14,20 @@
         <item name="android:fontFamily">@font/vazir</item>
 
         <item name="android:windowTranslucentStatus">true</item>
+
+        <item name="textInputStyle">@style/AppTextField</item>
     </style>
 
     <style name="DialogAnim">
         <item name="android:windowEnterAnimation">@anim/dialog_anim_in</item>
         <item name="android:windowExitAnimation">@anim/dialog_anim_out</item>
+    </style>
+
+
+    <style name="AppTextField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense" >
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 
 

@@ -2,8 +2,8 @@ package com.ali77gh.pash.ui.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                     loginLayout.animate().alpha(0.0F).setDuration(200).start()
                     loginLayout.postDelayed({
                         listLayout.alpha = 0.0F
+                        loginLayout.visibility = GONE
                         listLayout.visibility = VISIBLE
                         listLayout.animate().alpha(1.0F).setDuration(200).start()
                         setupForgotPassword()

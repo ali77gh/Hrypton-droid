@@ -11,12 +11,12 @@ object Pasher {
     //max size is min+3
 
     // caching
-    private val cache = mutableMapOf<String,String>()
+    private val cache = mutableMapOf<String, String>()
 
     /**
-     * @return 64 lower case and numbers
+     * @return 64 chars (0 1 2 3 4 5 6 7 8 9 a b c d e f) with same possibility
      * */
-    private fun sha256(input: String): String {
+    fun sha256(input: String): String {
         try {
             val digest = MessageDigest.getInstance("SHA-256")
             val hash = digest.digest(input.toByteArray(charset("UTF-8")))
@@ -54,122 +54,58 @@ object Pasher {
      * */
     private object Standard {
 
-        /**
-         * @param input decider (lowercase or number)
-         * */
-        fun shouldSwitch(input: Char): Boolean {
-
-            return when (input) {
-                'a' -> true
-                'b' -> true
-                'c' -> true
-                'd' -> true
-                'e' -> true
-                'f' -> true
-                'g' -> true
-                'h' -> true
-                'i' -> true
-                'j' -> true
-                'k' -> true
-                'm' -> true
-                'n' -> true
-                'l' -> true
-                'o' -> true
-                'p' -> true
-                'q' -> true
-                'r' -> true
-                's' -> false
-                't' -> false
-                'u' -> false
-                'v' -> false
-                'w' -> false
-                'x' -> false
-                'y' -> false
-                'z' -> false
-                '0' -> false
-                '1' -> false
-                '2' -> false
-                '3' -> false
-                '4' -> false
-                '5' -> false
-                '6' -> false
-                '7' -> false
-                '8' -> false
-                '9' -> false
-
-                else -> throw java.lang.RuntimeException("character is not lower case or number")
-            }
-        }
+        private const val hexChars = "0123456789abcdef"
+        private const val allowedChars = "0123456789abcdefghijkmnlopqrstuvwxyzABCDEFGHIJKMNLPOQRSTUVWXYZ/~!@#\$%^&*_-+=`|\\(){}[]:;\"'<>,.?/"
 
         /**
          * char replacement map
          * @param input lower case and number
          * @return      upper case and allowed special chars
          * */
-        fun switch(input: Char): Char {
+        private fun switch(input1: Char, input2: Char): Char {
 
-            return when (input) {
-                // used in both calls
-                'a' -> 'A'
-                'b' -> 'B'
-                'c' -> 'C'
-                'd' -> 'D'
-                'e' -> 'E'
-                'f' -> 'F'
-                'g' -> 'G'
-                'h' -> 'H'
-                'i' -> 'I'
-                'j' -> 'J'
-                'k' -> 'K'
-                'm' -> 'M'
-                'n' -> 'N'
-                'l' -> 'L'
-                'o' -> 'O'
-                'p' -> 'P'
-                'q' -> 'Q'
-                'r' -> 'R'
-                's' -> 'S'
-                't' -> 'T'
-                'u' -> 'U'
-                'v' -> 'V'
-                'w' -> 'W'
-                'x' -> 'X'
-                'y' -> 'Y'
-                'z' -> 'Z'
-                '0' -> ')'
-                '1' -> '!'
-                '2' -> '@'
-                '3' -> '#'
-                '4' -> '$'
-                '5' -> '%'
-                '6' -> '^'
-                '7' -> '&'
-                '8' -> '*'
-                '9' -> '('
+            var number = charsToNum(input1, input2).toDouble()
+            // num is a number 0 <= x <= 127
+            // so make it a number 0 <= x <= allowedChars.size()
+            number = ((number / 127) * (allowedChars.length - 1))
+            return allowedChars[number.toInt()]
 
-                // we miss some special chars ->   ~`-_=+\|}]{[:;"'/?.><,
+        }
+
+        /**
+         * @param char lower case and numbers
+         * @return a number 0 <= x <= 35
+         * */
+        private fun charToNum(char: Char) = hexChars.indexOf(char)
+
+        private fun charsToNum(input1: Char, input2: Char): Int {
+
+            return when (input1) {
+                '0', '1' -> hexChars.indexOf(input2)
+                '2', '3' -> hexChars.indexOf(input2) + 16
+                '4', '5' -> hexChars.indexOf(input2) + 32
+                '6', '7' -> hexChars.indexOf(input2) + 48
+                '8', '9' -> hexChars.indexOf(input2) + 64
+                'a', 'b' -> hexChars.indexOf(input2) + 80
+                'c', 'd' -> hexChars.indexOf(input2) + 96
+                'e', 'f' -> hexChars.indexOf(input2) + 112
 
                 else -> throw java.lang.RuntimeException("character is not lower or number")
             }
         }
 
-        fun main(input: String) :String{
-            val chars = input.substring(0,32)
-            val decider = input.substring(32,64)
+
+        fun main(input: String): String {
 
             var result = ""
-            for (i in decider.indices) {
+            for (i in 0..63 step 2) {
 
-                result += if (shouldSwitch(decider[i])) {
-                    switch(chars[i])
-                } else {
-                    chars[i]
-                }
+                result += switch(input[i], input[i + 1])
             }
 
             //if its not standard try one more hash
             //(to make sure output is standard password and website validator gonna accept it)
-            if (Validation.password(result.substring(0,PASSWORD_MIN_SIZE)) != Validation.OK){
+            if (Validation.password(result.substring(0, PASSWORD_MIN_SIZE)) != Validation.OK) {
                 result = sha256(result)
                 result = main(result)
             }
@@ -177,49 +113,73 @@ object Pasher {
             return result
         }
 
+        /**
+         * @param hashResult 64 lower case and numbers
+         * @return 4 digits (in string)
+         * */
+        fun bankMode(hashResult: String): String {
+
+            var result = ""
+            for (i in 0..3) {
+                var num = charToNum(hashResult[i]).toDouble()
+                // num is a number 0 <= x <= 15
+                // so make it a number 0 <= x <= 9
+                num = ((num / 15) * 9)
+                result += num.toInt().toString()
+            }
+            return result
+        }
     }
 
 
     /**
-    * @return chars with dynamic size (PASSWORD_MIN_SIZE..PASSWORD_MIN_SIZE+3) with same possibility
-    * */
-    private fun limitIt(input: String) : String {
+     * @return chars with dynamic size (PASSWORD_MIN_SIZE..PASSWORD_MIN_SIZE+3) with same possibility
+     * */
+    private fun limitIt(input: String): String {
 
         val bit1 =
                 input[input.lastIndex].isLowerCase()
-                ||
-                input[input.lastIndex].isDigit()
+                        ||
+                        input[input.lastIndex].isDigit()
 
         val bit2 =
                 input[input.lastIndex - 1].isLowerCase()
-                ||
-                input[input.lastIndex - 1].isDigit()
+                        ||
+                        input[input.lastIndex - 1].isDigit()
         // this values are 50% true
 
         return when {
-             bit1 and  bit2 -> input.substring(0, PASSWORD_MIN_SIZE)
-            !bit1 and  bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 1)
-             bit1 and !bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 2)
+            bit1 and bit2 -> input.substring(0, PASSWORD_MIN_SIZE)
+            !bit1 and bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 1)
+            bit1 and !bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 2)
             !bit1 and !bit2 -> input.substring(0, PASSWORD_MIN_SIZE + 3)
             else -> throw java.lang.RuntimeException("this should never happen")
         }
     }
 
+
+    // public methods
+
     /**
+     * hash to generate password
      * @param listener this callback called when password is ready (not in ui thread)
+     * result is standard password with lower case and upper case numbers and special chars
+     * with dynamic size
      * */
-    private fun mainAlgorithm(value: String, listener: PasherListener) {
+    fun pash(masterPass: String, url: String, username: String, isGuest: Boolean, listener: PasherListener) {
 
         Thread {
 
-            if (cache.containsKey(value)){
+            var value = "$masterPass$url$username"
+
+            if (isGuest) value += "whatever"
+
+            if (cache.containsKey(value)) {
                 listener.onReady(cache[value]!!)
                 return@Thread
             }
 
-            var pash: String
-
-            pash = slowIt(value)
+            var pash: String = slowIt(value)
             pash = Standard.main(pash)
             pash = limitIt(pash)
 
@@ -230,19 +190,22 @@ object Pasher {
         }.start()
     }
 
-
-
-    // public methods
-
     /**
-     * hash to generate password
+     * hash to generate password in bank mode
+     * @return 4 digits
      * */
-    fun pash(masterPass: String, url: String, username: String,isGuest: Boolean, listener: PasherListener ) {
-        if (isGuest)
-            mainAlgorithm("$masterPass$url$username GuestMode", listener)
-        else
-            mainAlgorithm("$masterPass$url$username", listener)
+    fun pashBankMode(masterPass: String, lastFourDigit: String, isGuest: Boolean, listener: PasherListener) {
 
+        Thread {
+            var pash = "$masterPass $lastFourDigit"
+            if (isGuest) pash += "GuestMode"
+
+            pash = slowIt(pash)
+            pash = Standard.bankMode(pash)
+
+            listener.onReady(pash)
+
+        }.start()
     }
 
     /**
@@ -251,9 +214,7 @@ object Pasher {
      * */
     fun mash(masterPass: String, listener: PasherListener) {
         Thread {
-
-            listener.onReady(slowIt(masterPass).substring(0,2))
-
+            listener.onReady(slowIt(masterPass).substring(0, 2))
         }.start()
     }
 }

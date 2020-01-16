@@ -1,6 +1,5 @@
 package com.ali77gh.pash
 
-
 import com.ali77gh.pash.core.Pasher
 import com.ali77gh.pash.core.PasherListener
 import org.junit.Test
@@ -16,13 +15,16 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
 
-
-        Pasher.pash("masterPassword","test.com","username",false,object : PasherListener {
+        for (i in 0..10000)
+        Pasher.pash("masterPass","url.com","$i",false,object : PasherListener {
             override fun onReady(pass: String) {
-               print(pass)
+                println(pass)
             }
 
         })
+
+        readLine()
+        //println("0123456789abcdefghijkmnlopqrstuvwxyzABCDEFGHIJKMNLOPQRSTUVWXYZ/~!@#\$%^&*_-+=`|\\(){}[]:;\"'<>,.?//".length)
     }
 
 }

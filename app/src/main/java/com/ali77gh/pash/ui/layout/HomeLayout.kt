@@ -5,8 +5,10 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatCheckBox
 import com.ali77gh.pash.R
 import com.ali77gh.pash.core.Validation
 import com.ali77gh.pash.ui.dialog.ShowPasswordDialog
@@ -20,29 +22,62 @@ class HomeLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, a
 
         val url = root.findViewById<TextInputEditText>(R.id.text_new_password_url)
         val urlErr = root.findViewById<TextView>(R.id.text_website_input_error)
+
         val username = root.findViewById<TextInputEditText>(R.id.text_new_password_username)
         val usernameErr = root.findViewById<TextView>(R.id.text_username_input_error)
+
+        val bankNumber = root.findViewById<TextInputEditText>(R.id.text_new_password_bank)
+        val bankNumberErr = root.findViewById<TextView>(R.id.text_bank_input_error)
+
+        val bankModeCheckBox = root.findViewById<AppCompatCheckBox>(R.id.check_new_password_bank)
         val add = root.findViewById<TextView>(R.id.btn_new_password_add)
+
+
+        bankModeCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked){
+                (bankNumberErr.parent as ViewGroup).visibility = View.VISIBLE
+                (urlErr.parent as ViewGroup).visibility = View.GONE
+                (usernameErr.parent as ViewGroup).visibility = View.GONE
+            }else{
+                (bankNumberErr.parent as ViewGroup).visibility = View.GONE
+                (urlErr.parent as ViewGroup).visibility = View.VISIBLE
+                (usernameErr.parent as ViewGroup).visibility = View.VISIBLE
+            }
+        }
 
 
         add.setOnClickListener {
 
-            val urlRes = Validation.website(url.text.toString())
-            val usernameRes = Validation.username(username.text.toString())
+            if (bankModeCheckBox.isChecked){
 
-            if (urlRes != Validation.OK)
-                showError(url, urlErr, urlRes)
+                val bankNumberRes = Validation.bankNumberLastFourDigit(bankNumber.text.toString())
+
+                if (bankNumberRes != Validation.OK)
+                    showError(url, urlErr, bankNumberRes)
+                else
+                    ShowPasswordDialog(
+                            activity,
+                            bankNumber.text.toString()
+                    ).show()
+
+            }else{
+                val urlRes = Validation.website(url.text.toString())
+                val usernameRes = Validation.username(username.text.toString())
+
+                if (urlRes != Validation.OK)
+                    showError(url, urlErr, urlRes)
 
 
-            if (usernameRes != Validation.OK)
-                showError(username, usernameErr, usernameRes)
+                if (usernameRes != Validation.OK)
+                    showError(username, usernameErr, usernameRes)
 
-            if (urlRes == Validation.OK && usernameRes == Validation.OK)
-                ShowPasswordDialog(
-                        activity,
-                        username.text.toString(),
-                        url.text.toString()
-                ).show()
+                if (urlRes == Validation.OK && usernameRes == Validation.OK)
+                    ShowPasswordDialog(
+                            activity,
+                            username.text.toString(),
+                            url.text.toString()
+                    ).show()
+            }
 
         }
 

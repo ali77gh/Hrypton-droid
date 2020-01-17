@@ -74,5 +74,15 @@ object Validation {
         return OK
     }
 
+    fun bankNumberLastFourDigit(bankNumber:String):String{
+
+        if (bankNumber.contains(' '))
+            return "space is not allowed"
+
+        if(bankNumber.length <4) return "enter 4 digits"
+
+        return OK
+    }
+
     private fun Char.isSpecialChar() = allowedSpecialChars.contains(this)
 }

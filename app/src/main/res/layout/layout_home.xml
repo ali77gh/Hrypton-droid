@@ -80,6 +80,41 @@
 
         </FrameLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:hint="bank number last four digits"
+                app:counterEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_new_password_bank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:singleLine="true"
+                    android:inputType="number"
+                    android:maxLength="4"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/text_bank_input_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_marginLeft="25dp"
+                android:textColor="@color/red"
+                android:textSize="11sp" />
+
+        </FrameLayout>
+
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/check_new_password_bank"

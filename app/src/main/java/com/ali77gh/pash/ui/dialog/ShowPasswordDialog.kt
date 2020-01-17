@@ -16,16 +16,31 @@ import com.ali77gh.pash.ui.activity.MainActivity
 import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
 
 
-class ShowPasswordDialog(activity: Activity, private val username: String,private val url:String) : BaseDialog(activity) {
+class ShowPasswordDialog(activity: Activity) : BaseDialog(activity) {
 
-    var pass : String = ""
+    private var pass : String = ""
 
-    var title : TextView? = null
-    var password : TextView? = null
-    var progress : FuckingCoolProgressbar? = null
-    var guest : CheckBox? = null
-    var copy : TextView? = null
-    var qr : ImageView?= null
+    private var username = ""
+    private var url = ""
+    private var bankNumber = ""
+    private var bankMode = false
+
+    private var title : TextView? = null
+    private var password : TextView? = null
+    private var progress : FuckingCoolProgressbar? = null
+    private var guest : CheckBox? = null
+    private var copy : TextView? = null
+    private var qr : ImageView?= null
+
+    constructor(activity: Activity,username: String, url:String):this(activity){
+        this.username = username
+        this.url = url
+    }
+
+    constructor(activity: Activity, bankNumber:String):this(activity){
+        this.bankNumber = bankNumber
+        bankMode = true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,30 +80,49 @@ class ShowPasswordDialog(activity: Activity, private val username: String,privat
 
     private fun startPashing(isGuest :Boolean){
 
-        title!!.text = "generating password..."
-        copy!!.visibility = GONE
-        qr!!.visibility = GONE
-        progress!!.start()
-        password!!.visibility = GONE
-        this.pass = ""
-        guest!!.isEnabled = false
+        fun startAnim(){
+            title!!.text = "generating password..."
+            copy!!.visibility = GONE
+            qr!!.visibility = GONE
+            progress!!.start()
+            password!!.visibility = GONE
+            this.pass = ""
+            guest!!.isEnabled = false
+        }
 
-        Pasher.pash(MainActivity.masterKey, url, username,isGuest, object : PasherListener {
-            override fun onReady(pass: String) {
-                activity.runOnUiThread{
-                    progress!!.stop(cb = {
-                        title!!.text = "your password"
-                        copy!!.visibility = VISIBLE
-                        qr!!.visibility = VISIBLE
-                        password!!.visibility = VISIBLE
-                        password!!.text = pass
-                        this@ShowPasswordDialog.pass = pass
-                        guest!!.isEnabled = true
-                    })
+        fun stopAnim(pass:String){
+            progress!!.stop(cb = {
+                title!!.text = "your password"
+                copy!!.visibility = VISIBLE
+                qr!!.visibility = VISIBLE
+                password!!.visibility = VISIBLE
+                password!!.text = pass
+                this@ShowPasswordDialog.pass = pass
+                guest!!.isEnabled = true
+            })
+        }
+
+
+        startAnim()
+        if (bankMode)
+            Pasher.pashBankMode(MainActivity.masterKey, bankNumber,isGuest, object : PasherListener {
+                override fun onReady(pass: String) {
+                    activity.runOnUiThread{
+                        stopAnim(pass)
+                    }
                 }
-            }
 
-        })
+            })
+        else
+            Pasher.pash(MainActivity.masterKey, url, username,isGuest, object : PasherListener {
+                override fun onReady(pass: String) {
+                    activity.runOnUiThread{
+                        stopAnim(pass)
+                    }
+                }
+
+            })
+
     }
 
     private fun putInClipBoard(value :String){

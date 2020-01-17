@@ -74,7 +74,7 @@ object Pasher {
 
         /**
          * @param char lower case and numbers
-         * @return a number 0 <= x <= 35
+         * @return a number 0 <= x <= 15
          * */
         private fun charToNum(char: Char) = hexChars.indexOf(char)
 

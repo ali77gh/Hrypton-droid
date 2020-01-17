@@ -24,7 +24,6 @@ class ExampleUnitTest {
         })
 
         readLine()
-        //println("0123456789abcdefghijkmnlopqrstuvwxyzABCDEFGHIJKMNLOPQRSTUVWXYZ/~!@#\$%^&*_-+=`|\\(){}[]:;\"'<>,.?//".length)
     }
 
 }

@@ -9,6 +9,8 @@ import android.view.View.VISIBLE
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import com.ali77gh.pash.R
 import com.ali77gh.pash.core.Pasher
 import com.ali77gh.pash.core.PasherListener
@@ -70,6 +72,7 @@ class ShowPasswordDialog(activity: Activity) : BaseDialog(activity) {
 
         copy!!.setOnClickListener {
             putInClipBoard(pass)
+            Toast.makeText(activity, "copied to clipboard", LENGTH_LONG).show()
             dismiss()
         }
 

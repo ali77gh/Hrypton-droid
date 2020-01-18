@@ -6,8 +6,9 @@ import java.security.MessageDigest
 object Pasher {
 
     //config
-    private val HASH_LAYERS_COUNT = 50_000 // increase this make algorithm slower (and safer)
-    private val PASSWORD_MIN_SIZE = 12 //if you want to increase PASSWORD_MIN_SIZE use sha-512
+    private const val HASH_LAYERS_COUNT = 50_000 // increase this make algorithm slower (and safer)
+    private const val PASSWORD_MIN_SIZE = 12 //if you want to increase PASSWORD_MIN_SIZE use sha-512
+    private const val ENABLE_CACHE = true
     //max size is min+3
 
     // caching
@@ -185,7 +186,8 @@ object Pasher {
 
             listener.onReady(pash) // go ;)
 
-            cache[value] = pash // push to cache
+            if (ENABLE_CACHE)
+                cache[value] = pash // push to cache
 
         }.start()
     }
@@ -197,14 +199,23 @@ object Pasher {
     fun pashBankMode(masterPass: String, lastFourDigit: String, isGuest: Boolean, listener: PasherListener) {
 
         Thread {
-            var pash = "$masterPass $lastFourDigit"
-            if (isGuest) pash += "GuestMode"
 
-            pash = slowIt(pash)
+            var input = "$masterPass $lastFourDigit"
+            if (isGuest) input += "GuestMode"
+
+            if (cache.containsKey(input)) {
+                listener.onReady(cache[input]!!)
+                return@Thread
+            }
+
+
+            var pash = slowIt(input)
             pash = Standard.bankMode(pash)
 
             listener.onReady(pash)
 
+            if (ENABLE_CACHE)
+                cache[input] = pash // push to cache
         }.start()
     }
 

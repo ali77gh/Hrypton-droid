@@ -134,7 +134,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/app_button"
-            android:text="generate" />
+            android:text="generate"
+            android:textColor="@color/black" />
     </LinearLayout>
 
 </FrameLayout>

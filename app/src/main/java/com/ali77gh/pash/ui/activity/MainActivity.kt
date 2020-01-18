@@ -1,15 +1,17 @@
 package com.ali77gh.pash.ui.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import com.ali77gh.pash.R
 import com.ali77gh.pash.data.MasterPasswordRepo
 import com.ali77gh.pash.ui.dialog.AreYouSureForgotDialog
@@ -47,24 +49,29 @@ class MainActivity : AppCompatActivity() {
         val berger = findViewById<ImageView>(R.id.image_home_berger)
         drawer = findViewById(R.id.drawer_home)
 
+        fun openLink(link: String) {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+            startActivity(browserIntent)
+        }
+
         berger.setOnClickListener {
             drawer!!.openDrawer(Gravity.LEFT)
         }
 
         findViewById<TextView>(R.id.drawer_how_it_works).setOnClickListener {
-
+            openLink("https://github.com/ali77gh") // todo
         }
 
         findViewById<TextView>(R.id.drawer_website).setOnClickListener {
-
+            openLink("https://github.com/ali77gh") // todo
         }
 
         findViewById<TextView>(R.id.drawer_github).setOnClickListener {
-
+            openLink("https://github.com/ali77gh") // todo
         }
 
         findViewById<TextView>(R.id.drawer_who_is_behind).setOnClickListener {
-
+            openLink("https://github.com/ali77gh") // todo
         }
 
     }

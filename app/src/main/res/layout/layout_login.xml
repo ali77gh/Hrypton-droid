@@ -74,5 +74,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="40dp"
         android:background="@drawable/app_button"
-        android:text="enter" />
+        android:text="enter"
+        android:textColor="@color/black" />
 </LinearLayout>

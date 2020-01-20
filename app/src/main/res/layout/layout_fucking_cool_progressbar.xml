@@ -77,10 +77,9 @@
     </FrameLayout>
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/login_lock"
-        android:layout_gravity="center"
-        android:tint="@color/colorPrimary"/>
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_launcher_foreground"
+        android:layout_gravity="center" />
     
 </FrameLayout>

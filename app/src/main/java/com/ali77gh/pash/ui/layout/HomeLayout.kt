@@ -7,9 +7,13 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatCheckBox
 import com.ali77gh.pash.R
+import com.ali77gh.pash.core.AutoComplete
 import com.ali77gh.pash.core.Validation
 import com.ali77gh.pash.ui.dialog.ShowPasswordDialog
 import com.google.android.material.textfield.TextInputEditText
@@ -20,7 +24,7 @@ class HomeLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, a
     fun render(activity: Activity) {
         val root = activity.layoutInflater.inflate(R.layout.layout_home, null) as ViewGroup
 
-        val url = root.findViewById<TextInputEditText>(R.id.text_new_password_url)
+        val url = root.findViewById<AutoCompleteTextView>(R.id.text_new_password_url)
         val urlErr = root.findViewById<TextView>(R.id.text_website_input_error)
 
         val username = root.findViewById<TextInputEditText>(R.id.text_new_password_username)
@@ -31,6 +35,9 @@ class HomeLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, a
 
         val bankModeCheckBox = root.findViewById<AppCompatCheckBox>(R.id.check_new_password_bank)
         val add = root.findViewById<TextView>(R.id.btn_new_password_add)
+
+
+        AutoComplete.websites(activity, url)
 
 
         bankModeCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -84,7 +91,7 @@ class HomeLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, a
         this.addView(root)
     }
 
-    private fun showError(input: TextInputEditText, errorBox: TextView, msg: String) {
+    private fun showError(input: EditText, errorBox: TextView, msg: String) {
 
         errorBox.text = msg
 

@@ -62,7 +62,7 @@ class ShowPasswordDialog(activity: Activity) : BaseDialog(activity) {
         startPashing(false)
 
 
-        guest!!.setOnCheckedChangeListener { buttonView, isChecked ->
+        guest!!.setOnCheckedChangeListener { _, isChecked ->
             startPashing(isChecked)
         }
 

@@ -40,7 +40,7 @@ class HomeLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, a
         AutoComplete.websites(activity, url)
 
 
-        bankModeCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        bankModeCheckBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
                 (bankNumberErr.parent as ViewGroup).visibility = View.VISIBLE
                 (urlErr.parent as ViewGroup).visibility = View.GONE

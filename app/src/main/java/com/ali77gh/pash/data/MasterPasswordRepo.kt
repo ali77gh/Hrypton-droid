@@ -48,9 +48,9 @@ class MasterPasswordRepo(var activity: Activity) {
     fun hashSave(masterKey: String, listener: PasherListener) {
 
         Pasher.mash(masterKey, object :PasherListener{
-            override fun onReady(hashedMasterKey: String) {
+            override fun onReady(pass: String) {
                 activity.runOnUiThread {
-                    repo!!.Save(hashFileName, hashedMasterKey)
+                    repo!!.Save(hashFileName, pass)
                     listener.onReady("")
                 }
             }
@@ -64,9 +64,9 @@ class MasterPasswordRepo(var activity: Activity) {
     fun hashCheckSame(masterKey: String,listener: MasterKeyHashCheckListener){
 
         Pasher.mash(masterKey,object :PasherListener{
-            override fun onReady(hashedMasterKey: String) {
+            override fun onReady(pass: String) {
                 activity.runOnUiThread {
-                    listener.onReady(hashedMasterKey == hashLoad())
+                    listener.onReady(pass == hashLoad())
                 }
             }
         })

@@ -6,10 +6,9 @@ what if you have a algorithm that can generate password with your inputs? so you
 </br></br>
 my algorithm is a hash based on sha256 and its so slow (so its very hard to crack even for super computers)
 </br></br>
-so:
-</br>
+knowing that 
 krypton is superman weakness <br>
-crypton is super computers weakness
+crypton can be super computers weakness
 </br></br>
 and input parameters are:</br>
 
@@ -18,7 +17,7 @@ and input parameters are:</br>
 3. Your username
 
 # naming
-it comes from krypton (super man weakness)(its green) and it mixed with crypto.
+it is combination of krypton (super man weakness)(its green) and crypto.
 
 # talk is cheap show me the code
 ok checkout <a href="app/src/main/java/com/ali77gh/pash/core/Pasher.kt">this </a> kotlin file.

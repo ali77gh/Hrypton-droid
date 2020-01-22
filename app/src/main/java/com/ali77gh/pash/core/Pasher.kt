@@ -56,7 +56,7 @@ object Pasher {
     private object Standard {
 
         private const val hexChars = "0123456789abcdef"
-        private const val allowedChars = "0123456789abcdefghijkmnlopqrstuvwxyzABCDEFGHIJKMNLPOQRSTUVWXYZ/~!@#\$%^&*_-+=`|\\(){}[]:;\"'<>,.?/"
+        private const val allowedChars = "0123456789abcdefghijkmnlopqrstuvwxyzABCDEFGHIJKMNLPOQRSTUVWXYZ/~!@#\$%^&*_-+=`|\\(){}[]:;\"'<>,.?"
 
         /**
          * char replacement map

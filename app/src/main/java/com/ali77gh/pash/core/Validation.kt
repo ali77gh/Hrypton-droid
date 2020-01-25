@@ -64,7 +64,8 @@ object Validation {
 
     fun username(username:String):String{
 
-        if(username == "") return "is empty"
+        // username is optional
+        //if(username == "") return "is empty"
 
 
         if (username.contains(' '))
@@ -79,7 +80,7 @@ object Validation {
         if (bankNumber.contains(' '))
             return "space is not allowed"
 
-        if(bankNumber.length <4) return "enter 4 digits"
+        if (bankNumber.length != 4) return "enter 4 digits"
 
         return OK
     }

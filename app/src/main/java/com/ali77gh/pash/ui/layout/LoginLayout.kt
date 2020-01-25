@@ -1,16 +1,18 @@
 package com.ali77gh.pash.ui.layout
 
+
 import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.widget.AppCompatCheckBox
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.*
-
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.widget.AppCompatCheckBox
 import com.ali77gh.pash.R
 import com.ali77gh.pash.core.Pasher
 import com.ali77gh.pash.core.PasherListener
@@ -20,9 +22,12 @@ import com.ali77gh.pash.ui.dialog.ItsNotLastPasswordDialog
 import com.ali77gh.pash.ui.view.FuckingCoolProgressbar
 import com.google.android.material.textfield.TextInputEditText
 
+
 class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
 
     lateinit var listener: LoginLayoutListener
+
+    var warning = true
 
     fun render(activity: Activity) {
         val root = activity.layoutInflater.inflate(R.layout.layout_login, null) as ViewGroup
@@ -37,9 +42,12 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
 
         val masterKeyRepo = MasterPasswordRepo(activity)
 
+        warning = !MasterPasswordRepo(activity).hashIsExist()
+
         var isPasswordMode = true
         passwordVisibility.setOnClickListener {
 
+            warning = false
             if (isPasswordMode){
                 input.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 passwordVisibility.setImageResource(R.drawable.login_hide_password)
@@ -59,6 +67,13 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
             if (res != Validation.OK) {
 
                 showError(input,res)
+                return@setOnClickListener
+            }
+
+            if (warning) {
+                redToast(activity, "warning: app can't check password is correct or not.", LENGTH_LONG)
+                redToast(activity, "make sure its correct!!!", LENGTH_SHORT)
+                warning = false
                 return@setOnClickListener
             }
 
@@ -150,6 +165,13 @@ class LoginLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, 
         }
 
         this.addView(root)
+    }
+
+    private fun redToast(activity: Activity, txt: String, a: Int) {
+        val toastMessage = Toast.makeText(activity, txt, a)
+        val toastView = toastMessage.view
+        toastView.setBackgroundResource(R.drawable.red_toast)
+        toastMessage.show()
     }
 
     private fun showError(input:TextInputEditText,msg:String){

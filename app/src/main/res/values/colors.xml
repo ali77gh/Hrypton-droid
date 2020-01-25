@@ -3,10 +3,8 @@
     <color name="colorPrimary">#00CF48</color>
     <color name="colorPrimary_transparent">#D900CF48</color>
     <color name="colorPrimaryDark">#006D23</color>
-    <color name="colorAccent">#D81B60</color>
     <color name="black">#313131</color>
     <color name="white">#E4E4E4</color>
-    <color name="gray">#7E7E7E</color>
     <color name="red">#C00000</color>
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#006D23</color>

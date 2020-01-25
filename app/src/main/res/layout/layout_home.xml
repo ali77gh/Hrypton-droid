@@ -57,7 +57,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="16dp"
-                android:hint="username"
+                android:hint="username (optional)"
                 app:counterEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText

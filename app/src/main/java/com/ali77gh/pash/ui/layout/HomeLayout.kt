@@ -56,11 +56,12 @@ class HomeLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, a
         add.setOnClickListener {
 
             if (bankModeCheckBox.isChecked){
+                //bank mode
 
                 val bankNumberRes = Validation.bankNumberLastFourDigit(bankNumber.text.toString())
 
                 if (bankNumberRes != Validation.OK)
-                    showError(url, urlErr, bankNumberRes)
+                    showError(bankNumber, bankNumberErr, bankNumberRes)
                 else
                     ShowPasswordDialog(
                             activity,
@@ -68,6 +69,7 @@ class HomeLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, a
                     ).show()
 
             }else{
+                //website-username mode
                 val urlRes = Validation.website(url.text.toString())
                 val usernameRes = Validation.username(username.text.toString())
 

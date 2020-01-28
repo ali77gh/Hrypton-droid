@@ -39,6 +39,5 @@ green like krypton
 # who's behind this
 idea and algorithm -> <a href="https://github.com/ali77gh">ali ghahremani</a> </br>
 android ->  <a href="https://github.com/ali77gh">ali ghahremani</a> </br>
-website - > <a href="https://github.com/Hoomanmsh">hooman mirshafie</a></br>
-web extentation -> <a href="https://github.com/Hoomanmsh">hooman mirshafie</a>
-
+website - > <a href="https://github.com/ali77gh">ali ghahremani</a></br>
+web extentation -> <a href="https://github.com/ali77gh">ali ghahremani</a>

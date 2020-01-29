@@ -59,19 +59,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<TextView>(R.id.drawer_how_it_works).setOnClickListener {
-            openLink("https://github.com/ali77gh") // todo
+            openLink("https://hrypton.ir/#how_it_works")
         }
 
+        findViewById<TextView>(R.id.drawer_read_before_use).setOnClickListener {
+            openLink("https://hrypton.ir/#warning")
+        }
+
+
         findViewById<TextView>(R.id.drawer_website).setOnClickListener {
-            openLink("https://github.com/ali77gh") // todo
+            openLink("https://hrypton.ir")
         }
 
         findViewById<TextView>(R.id.drawer_github).setOnClickListener {
-            openLink("https://github.com/ali77gh") // todo
+            openLink("https://github.com/ali77gh/Hrypton-droid")
         }
 
         findViewById<TextView>(R.id.drawer_who_is_behind).setOnClickListener {
-            openLink("https://github.com/ali77gh") // todo
+            openLink("https://github.com/ali77gh")
         }
 
     }

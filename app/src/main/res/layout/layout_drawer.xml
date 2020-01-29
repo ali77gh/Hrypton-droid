@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="how it works"
+            android:text="How it works"
             android:textSize="20sp"
             android:textColor="@color/black"/>
 
@@ -37,11 +37,27 @@
             android:layout_marginRight="16dp"/>
 
         <TextView
+            android:id="@+id/drawer_read_before_use"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Read before use"
+            android:textSize="20sp"
+            android:textColor="@color/black" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+
+        <TextView
             android:id="@+id/drawer_website"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="website"
+            android:text="Website"
             android:textSize="20sp"
             android:textColor="@color/black"/>
 
@@ -57,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="github"
+            android:text="Github"
             android:textSize="20sp"
             android:textColor="@color/black"/>
 
@@ -73,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="who's behind"
+            android:text="Who's behind this"
             android:textSize="20sp"
             android:textColor="@color/black"/>
 

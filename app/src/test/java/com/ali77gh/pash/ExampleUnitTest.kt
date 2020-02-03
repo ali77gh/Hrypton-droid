@@ -15,15 +15,24 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
 
-        for (i in 0..10000)
-        Pasher.pash("masterPass","url.com","$i",false,object : PasherListener {
+
+        test()
+
+        readLine()
+    }
+
+    var i = 0
+    fun test() {
+        Pasher.pash("m", "u", i.toString(), false, object : PasherListener {
             override fun onReady(pass: String) {
                 println(pass)
+                if (i < 100) {
+                    i++
+                    test()
+                }
             }
 
         })
-
-        readLine()
     }
 
 }

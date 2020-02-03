@@ -65,11 +65,11 @@ object Pasher {
          * */
         private fun switch(input1: Char, input2: Char): Char {
 
-            var number = charsToNum(input1, input2).toDouble()
+            var number = charsToNum(input1, input2)
             // num is a number 0 <= x <= 127
             // so make it a number 0 <= x <= allowedChars.size()
-            number = ((number / 127) * (allowedChars.length - 1))
-            return allowedChars[number.toInt()]
+            number = (number * (allowedChars.length - 1)) / 127
+            return allowedChars[number]
 
         }
 
@@ -125,7 +125,7 @@ object Pasher {
                 var num = charToNum(hashResult[i]).toDouble()
                 // num is a number 0 <= x <= 15
                 // so make it a number 0 <= x <= 9
-                num = ((num / 15) * 9)
+                num = ((num * 9) / 15)
                 result += num.toInt().toString()
             }
             return result

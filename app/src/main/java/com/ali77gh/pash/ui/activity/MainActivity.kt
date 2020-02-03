@@ -79,6 +79,10 @@ class MainActivity : AppCompatActivity() {
             openLink("https://github.com/ali77gh")
         }
 
+        findViewById<TextView>(R.id.drawer_donation).setOnClickListener {
+            openLink("https://hrypton.ir/donation.html")
+        }
+
     }
 
     private fun setupStatusBar(){
